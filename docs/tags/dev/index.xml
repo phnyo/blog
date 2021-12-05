@@ -8,13 +8,14 @@
     <language>ja-JP</language>
     <lastBuildDate>Sat, 04 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/dev/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>HaskellでCコンパイラもどきを作る #1</title>
+      <title>Haskell覚え書き</title>
       <link>https://miso.sabanium.me/post/c-haskell1/</link>
       <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
       
       <guid>https://miso.sabanium.me/post/c-haskell1/</guid>
       <description>構文解析のためのモナド等についてまとめる。完全に自分用。
-   Haskellの文法について     覚書  他人のコードを読むときに忘れがちなこと。</description>
+   Haskellの文法について  よく見るやつ
+ 型拘束  (Ord a) =&amp;gt; a -&amp;gt; a  要素の存在  (x:xs) </description>
     </item>
     
     <item>

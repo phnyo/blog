@@ -6,34 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="theme-color" content="dark">
-    <title>HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない</title>
+    <title>The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない</title>
 
     
     
     
     <meta property="og:site_name" content="" />
-    <meta property="og:title" content="HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない"/>
-    <meta itemprop="name" content="HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない" />
-    <meta name="twitter:title" content="HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない" />
-    <meta name="application-name" content="HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない" />
+    <meta property="og:title" content="The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない"/>
+    <meta itemprop="name" content="The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない" />
+    <meta name="twitter:title" content="The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない" />
+    <meta name="application-name" content="The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない" />
 
 
-    <meta name="description" content="環境構築" />
-    <meta name="twitter:description" content="環境構築 "/>
-    <meta itemprop="description" content=" 環境構築 "/>
-    <meta property="og:description" content=" 環境構築 " />
+    <meta name="description" content="" />
+    <meta name="twitter:description" content=""/>
+    <meta itemprop="description" content=""/>
+    <meta property="og:description" content="" />
 
     
 
 <meta property="og:type" content="article" />
 <meta property="article:publisher" content="" />
-<meta property="og:article:published_time" content=2021-12-03T00:00:00Z />
-<meta property="article:published_time" content=2021-12-03T00:00:00Z />
+<meta property="og:article:published_time" content=2021-12-05T11:22:10&#43;0900 />
+<meta property="article:published_time" content=2021-12-05T11:22:10&#43;0900 />
 
-
-  <meta property="og:article:author" content="Sabanium" />
-  <meta property="article:author" content="Sabanium" />
-  <meta name="author" content="Sabanium" />
 
 
 
@@ -42,16 +38,16 @@
   {
     "@context": "http://schema.org",
     "@type": "Article",
-    "headline": "HaskellでCコンパイラもどきを作る #0",
+    "headline": "The Road to Monads: Applicativeについて",
     "author": {
       "@type": "Person",
       "name": ""
     },
-    "datePublished": "2021-12-03",
-    "description": "環境構築",
-    "wordCount":  26 ,
+    "datePublished": "2021-12-05",
+    "description": "",
+    "wordCount":  186 ,
     "mainEntityOfPage": "True",
-    "dateModified": "2021-12-03",
+    "dateModified": "2021-12-05",
     "publisher": {
       "@type": "Organization",
       "name": "",
@@ -114,19 +110,21 @@
         <header class="article-header">
             <div class="thumb">
                 <div>
-                    <h1>HaskellでCコンパイラもどきを作る #0</h1>
+                    <h1>The Road to Monads: Applicativeについて</h1>
                     <div class="post-meta">
                         <div>
                             
                             
-                            By sabanium | <time>December 03, 2021</time>
+                              
+                            
+                            By  | <time>December 05, 2021</time>
                             | 1 minutes
                         </div>
                         <div class="tags">
                             
-                            <a href="/tags/dev/">dev</a>
-                            
                             <a href="/tags/haskell/">Haskell</a>
+                            
+                            <a href="/tags/%E7%BF%BB%E8%A8%B3/">翻訳</a>
                             
                         </div>
                     </div>
@@ -136,34 +134,73 @@
     </article>
 
     <div class="article-post">
-    <p>まず環境構築をする。</p>
-<h3 id="haskellのインストール">
-    <a href="#haskell%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab" class="anchor">
+    <p><a href="/post/functor/">Functorについての覚え書き</a>の続き。</p>
+<h3 id="applicative-functor">
+    <a href="#applicative-functor" class="anchor">
         <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
             <path fill-rule="evenodd"
                 d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
             </path>
         </svg>
     </a>
-    Haskellのインストール
+    Applicative Functor
 </h3>
-<p><a href="https://www.haskell.org/downloads/">これ</a>を読んで、GHCupとHaskell Tool Stackの一番上の方にのってるcurlコマンドを叩く。</p>
-<pre tabindex="0"><code>curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-curl -sSL https://get.haskellstack.org/ | sh
-</code></pre><p>LSPは必要なので入れて、それ以外のものにも大体Yesと回答した気がする。なんかPとか押させるのが厄介。</p>
-<h3 id="haskell-language-serverの導入">
-    <a href="#haskell-language-server%e3%81%ae%e5%b0%8e%e5%85%a5" class="anchor">
-        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-            <path fill-rule="evenodd"
-                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
-            </path>
-        </svg>
-    </a>
-    Haskell Language Serverの導入
-</h3>
-<p>vim-lsp-settingsはHaskell Language Server(以下HLS)に対応していないがvim-lsp-settingsの<a href="https://github.com/mattn/vim-lsp-settings/issues/309">issue</a>を読むとそういうことが書いてあるので.vimrcを適当にいじるとうまくHLSが動く。</p>
-<p>これでGHC+HLSが入った環境が準備できた。</p>
+<p>FunctorはWrapperで、fmapを使えば(a -&gt; b)-&gt;(f a -&gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。</p>
+<p>でもこれだと問題があって、例えば</p>
+<pre tabindex="0"><code>f :: Int -&gt; Int -&gt; Int
+f a b = a * b
+</code></pre><p>みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。
+というか単純に一変数関数にしか使えん。
+これはけっこうだるい。</p>
+<p>そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。
+まずは関数定義から見てみよう。</p>
+<pre tabindex="0"><code>class functor f =&gt; Applicative f where
+  pure :: a -&gt; f a
+  (&lt;*&gt;) :: f (a -&gt; b) -&gt; f a -&gt; f b
+</code></pre><p>ここで()に囲まれているのは演算子であることを思い出そう。
+すると、まずpureはある型 a からFunctor a型に移すようなものだとわかる。
+pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して</p>
+<pre tabindex="0"><code>pure a -&gt; Just a
+</code></pre><p>である。どこがpureなのかはいまいちよくわからない。</p>
+<p>Haskellでは関数も型なので、こういうこともできる。ある項+1を取れば、</p>
+<pre tabindex="0"><code>pure (+1) -&gt; Just (+1)
+</code></pre><p>このJust(+1)の型はMaybe(a -&gt; a)である。</p>
+<p>うん。まあなんとなくはわかった感がある。</p>
+<p>次は(&lt;*&gt;)について。
+なにこいつ、なまこっぽいみたいな感想が先に立つけどまあうん。
+実はよく見るとfmapに似ていることがわかる。</p>
+<pre tabindex="0"><code>fmap :: (a -&gt; b) -&gt; f a -&gt; f b
+&lt;*&gt; :: f (a -&gt; b) -&gt; f a -&gt; f b
+</code></pre><p>ここでの違いは、もう関数がFunctorに埋め込まれているかどうかだけ。</p>
+<p>だから実は</p>
+<pre tabindex="0"><code>pure a -&gt; f a
+</code></pre><p>を思い出せば、型システムから</p>
+<pre tabindex="0"><code>fmap f x = pure f &lt;*&gt; x
+</code></pre><p>であることがわかる。</p>
+<p>具体例を作ってみよう。</p>
+<pre tabindex="0"><code>fn :: a -&gt; b
+</code></pre><p>に対して</p>
+<pre tabindex="0"><code>pure fn :: f (a -&gt; b) 
+</code></pre><p>なので、</p>
+<pre tabindex="0"><code>pure fn &lt;*&gt; :: a -&gt; f b
+fmap fn :: a -&gt; f b
+</code></pre><p>がいえる。ふう。もちろん、ここでfはFunctorの型でaは関数の引数である。</p>
+<p>いや、なんの役に立つねん。
+うーんと、実はなまこ&lt;*&gt;の重要性は関数を取ることにある。</p>
+<p>&lt;*&gt;の引数はf(a -&gt; b)といってるけど、このbがc -&gt; d -&gt; e型だった場合について考えよう。
+一回&lt;*&gt;を適用すると、返り値はf b だけどこれは実際には f( c -&gt; d -&gt; e )の型。
+あれ？これってさっきと同じ形じゃない？
+そう、そのとおりで、cをa、d -&gt; eをbと置き換えると、&lt;*&gt;をもう一回適用することでf(d -&gt; e)がでて、結局f eの値が出ることになる。
+その過程で、入力にf a、f b、f c、f dの値が必要になる。
+これって引数が多い関数じゃない？そう。
+だから再帰的なアプローチを関数に対して取ることで（！？）うまく引数の多い関数を実装できるような仕組みができているのだった。</p>
+<p>具体的な例を見よう。</p>
+<pre tabindex="0"><code>
 
+
+
+
+</code></pre>
     </div>
 </div>
 
@@ -171,12 +208,12 @@ curl -sSL https://get.haskellstack.org/ | sh
     
     <nav class="flex container suggested">
         
+        <a rel="prev" href="/post/functor/" title="Previous post (older)">
+            <span>Previous</span>
+            The Road to Monads: Functorについて
+            </a>
         
         
-        <a rel="next" href="/post/c-haskell1/" title="Next post (newer)">
-            <span>Next</span>
-            Haskell覚え書き
-            </a> 
         
     </nav>
     

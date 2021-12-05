@@ -6,29 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="theme-color" content="dark">
-    <title>HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない</title>
+    <title>The Road to Monads: Functorについて | 鯖の味噌煮をおいしく炊けない</title>
 
     
     
     
     <meta property="og:site_name" content="" />
-    <meta property="og:title" content="HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない"/>
-    <meta itemprop="name" content="HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない" />
-    <meta name="twitter:title" content="HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない" />
-    <meta name="application-name" content="HaskellでCコンパイラもどきを作る #0 | 鯖の味噌煮をおいしく炊けない" />
+    <meta property="og:title" content="The Road to Monads: Functorについて | 鯖の味噌煮をおいしく炊けない"/>
+    <meta itemprop="name" content="The Road to Monads: Functorについて | 鯖の味噌煮をおいしく炊けない" />
+    <meta name="twitter:title" content="The Road to Monads: Functorについて | 鯖の味噌煮をおいしく炊けない" />
+    <meta name="application-name" content="The Road to Monads: Functorについて | 鯖の味噌煮をおいしく炊けない" />
 
 
-    <meta name="description" content="環境構築" />
-    <meta name="twitter:description" content="環境構築 "/>
-    <meta itemprop="description" content=" 環境構築 "/>
-    <meta property="og:description" content=" 環境構築 " />
+    <meta name="description" content="" />
+    <meta name="twitter:description" content=""/>
+    <meta itemprop="description" content=""/>
+    <meta property="og:description" content="" />
 
     
 
 <meta property="og:type" content="article" />
 <meta property="article:publisher" content="" />
-<meta property="og:article:published_time" content=2021-12-03T00:00:00Z />
-<meta property="article:published_time" content=2021-12-03T00:00:00Z />
+<meta property="og:article:published_time" content=2021-12-04T22:45:30&#43;0900 />
+<meta property="article:published_time" content=2021-12-04T22:45:30&#43;0900 />
 
 
   <meta property="og:article:author" content="Sabanium" />
@@ -42,16 +42,16 @@
   {
     "@context": "http://schema.org",
     "@type": "Article",
-    "headline": "HaskellでCコンパイラもどきを作る #0",
+    "headline": "The Road to Monads: Functorについて",
     "author": {
       "@type": "Person",
       "name": ""
     },
-    "datePublished": "2021-12-03",
-    "description": "環境構築",
-    "wordCount":  26 ,
+    "datePublished": "2021-12-04",
+    "description": "",
+    "wordCount":  191 ,
     "mainEntityOfPage": "True",
-    "dateModified": "2021-12-03",
+    "dateModified": "2021-12-04",
     "publisher": {
       "@type": "Organization",
       "name": "",
@@ -114,19 +114,19 @@
         <header class="article-header">
             <div class="thumb">
                 <div>
-                    <h1>HaskellでCコンパイラもどきを作る #0</h1>
+                    <h1>The Road to Monads: Functorについて</h1>
                     <div class="post-meta">
                         <div>
                             
                             
-                            By sabanium | <time>December 03, 2021</time>
+                            By sabanium | <time>December 04, 2021</time>
                             | 1 minutes
                         </div>
                         <div class="tags">
                             
-                            <a href="/tags/dev/">dev</a>
-                            
                             <a href="/tags/haskell/">Haskell</a>
+                            
+                            <a href="/tags/%E7%BF%BB%E8%A8%B3/">翻訳</a>
                             
                         </div>
                     </div>
@@ -136,33 +136,73 @@
     </article>
 
     <div class="article-post">
-    <p>まず環境構築をする。</p>
-<h3 id="haskellのインストール">
-    <a href="#haskell%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab" class="anchor">
+    <p><a href="https://oliverbalfour.github.io/haskell/2020/08/04/functors-in-haskell.html">これ</a>を読む。
+あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので。</p>
+<h3 id="functor">
+    <a href="#functor" class="anchor">
         <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
             <path fill-rule="evenodd"
                 d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
             </path>
         </svg>
     </a>
-    Haskellのインストール
+    Functor
 </h3>
-<p><a href="https://www.haskell.org/downloads/">これ</a>を読んで、GHCupとHaskell Tool Stackの一番上の方にのってるcurlコマンドを叩く。</p>
-<pre tabindex="0"><code>curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-curl -sSL https://get.haskellstack.org/ | sh
-</code></pre><p>LSPは必要なので入れて、それ以外のものにも大体Yesと回答した気がする。なんかPとか押させるのが厄介。</p>
-<h3 id="haskell-language-serverの導入">
-    <a href="#haskell-language-server%e3%81%ae%e5%b0%8e%e5%85%a5" class="anchor">
+<p>Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。</p>
+<p>コードでの具体例：</p>
+<pre tabindex="0"><code>addMaybe :: Num a =&gt; Maybe a -&gt; Maybe a -&gt; Maybe a
+addMaybe (Just a) (Just b) = Just (a + b)
+addMaybe _ _ = Nothing
+</code></pre><p>確かに内部の値にアクセスしている。まあこれは恣意的な関数だけど。
+でも内部の値にアクセスすることが重要で、例えばf :: Int -&gt; Intはこういうfmapを使うことでMaybe Intにも使えるようになったりする。</p>
+<h3 id="fmap">
+    <a href="#fmap" class="anchor">
         <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
             <path fill-rule="evenodd"
                 d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
             </path>
         </svg>
     </a>
-    Haskell Language Serverの導入
+    fmap
 </h3>
-<p>vim-lsp-settingsはHaskell Language Server(以下HLS)に対応していないがvim-lsp-settingsの<a href="https://github.com/mattn/vim-lsp-settings/issues/309">issue</a>を読むとそういうことが書いてあるので.vimrcを適当にいじるとうまくHLSが動く。</p>
-<p>これでGHC+HLSが入った環境が準備できた。</p>
+<p>次に、こんな関数を考える。</p>
+<pre tabindex="0"><code>fmapList :: (a -&gt; b) -&gt; ([a] -&gt; [b])
+fmapList f [] = []
+fmapList f (x:xs) = f x : fmapList f xs
+</code></pre><p>これはmap関数と変わらない。
+ある関数をリストのすべての要素に適用するだけだ。</p>
+<p>では、これを一般化するとどうなるだろう？
+つまり、こんな感じの関数たちを統一的に記述できるだろうか？</p>
+<pre tabindex="0"><code>f :: (a -&gt; b) -&gt; ((Just a) -&gt; (Just b))
+f2 :: (a -&gt; b) -&gt; ([a] -&gt; [b])
+</code></pre><p>その関数が、functorと紐付けられたfmapである。
+技術的にはfunctorはFunctor型クラスでfmapと紐付いたインスタンス。
+ただし、満たすべき条件があり、それがこれ。</p>
+<ol>
+<li>fmap id == id (恒等的であること)</li>
+<li>fmap (f . g) == fmap f . fmap g (分配的であること)</li>
+</ol>
+<p>じゃあlistとMaybeの実装を見てみよう。</p>
+<p>PreludeのリストのFunctorの実装はこんな感じ。</p>
+<pre tabindex="0"><code>instance Functor [] where
+  fmap = map
+</code></pre><p>上で見たとおり、fmapListはmapと同じなのだった。
+mapはpythonとかの同名の関数と同じで、ある関数をリストの全要素に適用する関数。
+いや、さすがにこれだとわからなくない？</p>
+<p>次にMaybeを見よう。</p>
+<pre tabindex="0"><code>instance Functor Maybe where
+  fmap f (Just x) = Just (f x)
+  fmap _ Nothing = Nothing
+</code></pre><p>こっちの方が解釈はしやすい。fとJust xがあるなら、返り値（？）を(Just f x)として呼ぶことにしている。</p>
+<p>まあまあわかるような気もする。
+他には、</p>
+<pre tabindex="0"><code>data BinaryTree a = Node a (BinaryTree a) (BinaryTree a) | Leaf a
+</code></pre><p>こんな感じのBinaryTree型を使うとき、fmapは</p>
+<pre tabindex="0"><code>instance Functor BinaryTree where
+  fmap f (Node x left right) = Node (f x) (fmap f left) (fmap f right)
+  fmap f (Leaf x) = Leaf (f x)
+</code></pre><p>という感じになる。</p>
+<p>Functorというかfmapのいいところは、Wrapperの存在を意識せずに書けるところっぽい。</p>
 
     </div>
 </div>
@@ -171,11 +211,16 @@ curl -sSL https://get.haskellstack.org/ | sh
     
     <nav class="flex container suggested">
         
-        
-        
-        <a rel="next" href="/post/c-haskell1/" title="Next post (newer)">
-            <span>Next</span>
+        <a rel="prev" href="/post/c-haskell1/" title="Previous post (older)">
+            <span>Previous</span>
             Haskell覚え書き
+            </a>
+        
+        
+        
+        <a rel="next" href="/post/applicative/" title="Next post (newer)">
+            <span>Next</span>
+            The Road to Monads: Applicativeについて
             </a> 
         
     </nav>

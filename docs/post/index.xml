@@ -6,15 +6,45 @@
     <description>Recent content in Posts on 鯖の味噌煮をおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 04 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Dec 2021 11:22:10 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>HaskellでCコンパイラもどきを作る #1</title>
+      <title>The Road to Monads: Applicativeについて</title>
+      <link>https://miso.sabanium.me/post/applicative/</link>
+      <pubDate>Sun, 05 Dec 2021 11:22:10 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/applicative/</guid>
+      <description>Functorについての覚え書きの続き。
+   Applicative Functor  FunctorはWrapperで、fmapを使えば(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。
+でもこれだと問題があって、例えば
+f :: Int -&amp;gt; Int -&amp;gt; Int f a b = a * b みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。 というか単純に一変数関数にしか使えん。 これはけっこうだるい。
+そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。 まずは関数定義から見てみよう。
+class functor f =&amp;gt; Applicative f where pure :: a -&amp;gt; f a (&amp;lt;*&amp;gt;) :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b ここで()に囲まれているのは演算子であることを思い出そう。 すると、まずpureはある型 a からFunctor a型に移すようなものだとわかる。 pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して
+pure a -&amp;gt; Just a である。どこがpureなのかはいまいちよくわからない。</description>
+    </item>
+    
+    <item>
+      <title>The Road to Monads: Functorについて</title>
+      <link>https://miso.sabanium.me/post/functor/</link>
+      <pubDate>Sat, 04 Dec 2021 22:45:30 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/functor/</guid>
+      <description>これを読む。 あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので。
+   Functor  Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。
+コードでの具体例：
+addMaybe :: Num a =&amp;gt; Maybe a -&amp;gt; Maybe a -&amp;gt; Maybe a addMaybe (Just a) (Just b) = Just (a + b) addMaybe _ _ = Nothing 確かに内部の値にアクセスしている。まあこれは恣意的な関数だけど。 でも内部の値にアクセスすることが重要で、例えばf :: Int -&amp;gt; Intはこういうfmapを使うことでMaybe Intにも使えるようになったりする。
+   fmap  次に、こんな関数を考える。
+fmapList :: (a -&amp;gt; b) -&amp;gt; ([a] -&amp;gt; [b]) fmapList f [] = [] fmapList f (x:xs) = f x : fmapList f xs これはmap関数と変わらない。 ある関数をリストのすべての要素に適用するだけだ。</description>
+    </item>
+    
+    <item>
+      <title>Haskell覚え書き</title>
       <link>https://miso.sabanium.me/post/c-haskell1/</link>
       <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
       
       <guid>https://miso.sabanium.me/post/c-haskell1/</guid>
       <description>構文解析のためのモナド等についてまとめる。完全に自分用。
-   Haskellの文法について     覚書  他人のコードを読むときに忘れがちなこと。</description>
+   Haskellの文法について  よく見るやつ
+ 型拘束  (Ord a) =&amp;gt; a -&amp;gt; a  要素の存在  (x:xs) </description>
     </item>
     
     <item>

@@ -5,9 +5,164 @@
     <description>Recent content on 鯖の味噌煮をおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 04 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Dec 2021 11:22:10 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
     <item>
-    <title>HaskellでCコンパイラもどきを作る #1</title>
+    <title>The Road to Monads: Applicativeについて</title>
+    <link>https://miso.sabanium.me/post/applicative/</link>
+    <pubDate>Sun, 05 Dec 2021 11:22:10 +0900</pubDate>
+    
+    <guid>https://miso.sabanium.me/post/applicative/</guid>
+    <description>
+        &lt;p&gt;&lt;a href=&#34;https://miso.sabanium.me/post/functor/&#34;&gt;Functorについての覚え書き&lt;/a&gt;の続き。&lt;/p&gt;
+&lt;h3 id=&#34;applicative-functor&#34;&gt;
+    &lt;a href=&#34;#applicative-functor&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    Applicative Functor
+&lt;/h3&gt;
+&lt;p&gt;FunctorはWrapperで、fmapを使えば(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。&lt;/p&gt;
+&lt;p&gt;でもこれだと問題があって、例えば&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;f :: Int -&amp;gt; Int -&amp;gt; Int
+f a b = a * b
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。
+というか単純に一変数関数にしか使えん。
+これはけっこうだるい。&lt;/p&gt;
+&lt;p&gt;そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。
+まずは関数定義から見てみよう。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;class functor f =&amp;gt; Applicative f where
+  pure :: a -&amp;gt; f a
+  (&amp;lt;*&amp;gt;) :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;ここで()に囲まれているのは演算子であることを思い出そう。
+すると、まずpureはある型 a からFunctor a型に移すようなものだとわかる。
+pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure a -&amp;gt; Just a
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;である。どこがpureなのかはいまいちよくわからない。&lt;/p&gt;
+&lt;p&gt;Haskellでは関数も型なので、こういうこともできる。ある項+1を取れば、&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure (+1) -&amp;gt; Just (+1)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;このJust(+1)の型はMaybe(a -&amp;gt; a)である。&lt;/p&gt;
+&lt;p&gt;うん。まあなんとなくはわかった感がある。&lt;/p&gt;
+&lt;p&gt;次は(&amp;lt;*&amp;gt;)について。
+なにこいつ、なまこっぽいみたいな感想が先に立つけどまあうん。
+実はよく見るとfmapに似ていることがわかる。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;fmap :: (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b
+&amp;lt;*&amp;gt; :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;ここでの違いは、もう関数がFunctorに埋め込まれているかどうかだけ。&lt;/p&gt;
+&lt;p&gt;だから実は&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure a -&amp;gt; f a
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;を思い出せば、型システムから&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;fmap f x = pure f &amp;lt;*&amp;gt; x
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;であることがわかる。&lt;/p&gt;
+&lt;p&gt;具体例を作ってみよう。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;fn :: a -&amp;gt; b
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;に対して&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure fn :: f (a -&amp;gt; b) 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;なので、&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure fn &amp;lt;*&amp;gt; :: a -&amp;gt; f b
+fmap fn :: a -&amp;gt; f b
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;がいえる。ふう。もちろん、ここでfはFunctorの型でaは関数の引数である。&lt;/p&gt;
+&lt;p&gt;いや、なんの役に立つねん。
+うーんと、実はなまこ&amp;lt;*&amp;gt;の重要性は関数を取ることにある。&lt;/p&gt;
+&lt;p&gt;&amp;lt;*&amp;gt;の引数はf(a -&amp;gt; b)といってるけど、このbがc -&amp;gt; d -&amp;gt; e型だった場合について考えよう。
+一回&amp;lt;*&amp;gt;を適用すると、返り値はf b だけどこれは実際には f( c -&amp;gt; d -&amp;gt; e )の型。
+あれ？これってさっきと同じ形じゃない？
+そう、そのとおりで、cをa、d -&amp;gt; eをbと置き換えると、&amp;lt;*&amp;gt;をもう一回適用することでf(d -&amp;gt; e)がでて、結局f eの値が出ることになる。
+その過程で、入力にf a、f b、f c、f dの値が必要になる。
+これって引数が多い関数じゃない？そう。
+だから再帰的なアプローチを関数に対して取ることで（！？）うまく引数の多い関数を実装できるような仕組みができているのだった。&lt;/p&gt;
+&lt;p&gt;具体的な例を見よう。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;
+
+
+
+
+&lt;/code&gt;&lt;/pre&gt;
+    </description>
+    </item>
+    
+    <item>
+    <title>The Road to Monads: Functorについて</title>
+    <link>https://miso.sabanium.me/post/functor/</link>
+    <pubDate>Sat, 04 Dec 2021 22:45:30 +0900</pubDate>
+    <author>sabanium</author>
+    <guid>https://miso.sabanium.me/post/functor/</guid>
+    <description>
+        &lt;p&gt;&lt;a href=&#34;https://oliverbalfour.github.io/haskell/2020/08/04/functors-in-haskell.html&#34;&gt;これ&lt;/a&gt;を読む。
+あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので。&lt;/p&gt;
+&lt;h3 id=&#34;functor&#34;&gt;
+    &lt;a href=&#34;#functor&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    Functor
+&lt;/h3&gt;
+&lt;p&gt;Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。&lt;/p&gt;
+&lt;p&gt;コードでの具体例：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;addMaybe :: Num a =&amp;gt; Maybe a -&amp;gt; Maybe a -&amp;gt; Maybe a
+addMaybe (Just a) (Just b) = Just (a + b)
+addMaybe _ _ = Nothing
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;確かに内部の値にアクセスしている。まあこれは恣意的な関数だけど。
+でも内部の値にアクセスすることが重要で、例えばf :: Int -&amp;gt; Intはこういうfmapを使うことでMaybe Intにも使えるようになったりする。&lt;/p&gt;
+&lt;h3 id=&#34;fmap&#34;&gt;
+    &lt;a href=&#34;#fmap&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    fmap
+&lt;/h3&gt;
+&lt;p&gt;次に、こんな関数を考える。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;fmapList :: (a -&amp;gt; b) -&amp;gt; ([a] -&amp;gt; [b])
+fmapList f [] = []
+fmapList f (x:xs) = f x : fmapList f xs
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;これはmap関数と変わらない。
+ある関数をリストのすべての要素に適用するだけだ。&lt;/p&gt;
+&lt;p&gt;では、これを一般化するとどうなるだろう？
+つまり、こんな感じの関数たちを統一的に記述できるだろうか？&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;f :: (a -&amp;gt; b) -&amp;gt; ((Just a) -&amp;gt; (Just b))
+f2 :: (a -&amp;gt; b) -&amp;gt; ([a] -&amp;gt; [b])
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;その関数が、functorと紐付けられたfmapである。
+技術的にはfunctorはFunctor型クラスでfmapと紐付いたインスタンス。
+ただし、満たすべき条件があり、それがこれ。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;fmap id == id (恒等的であること)&lt;/li&gt;
+&lt;li&gt;fmap (f . g) == fmap f . fmap g (分配的であること)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;じゃあlistとMaybeの実装を見てみよう。&lt;/p&gt;
+&lt;p&gt;PreludeのリストのFunctorの実装はこんな感じ。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;instance Functor [] where
+  fmap = map
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上で見たとおり、fmapListはmapと同じなのだった。
+mapはpythonとかの同名の関数と同じで、ある関数をリストの全要素に適用する関数。
+いや、さすがにこれだとわからなくない？&lt;/p&gt;
+&lt;p&gt;次にMaybeを見よう。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;instance Functor Maybe where
+  fmap f (Just x) = Just (f x)
+  fmap _ Nothing = Nothing
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;こっちの方が解釈はしやすい。fとJust xがあるなら、返り値（？）を(Just f x)として呼ぶことにしている。&lt;/p&gt;
+&lt;p&gt;まあまあわかるような気もする。
+他には、&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;data BinaryTree a = Node a (BinaryTree a) (BinaryTree a) | Leaf a
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;こんな感じのBinaryTree型を使うとき、fmapは&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;instance Functor BinaryTree where
+  fmap f (Node x left right) = Node (f x) (fmap f left) (fmap f right)
+  fmap f (Leaf x) = Leaf (f x)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;という感じになる。&lt;/p&gt;
+&lt;p&gt;Functorというかfmapのいいところは、Wrapperの存在を意識せずに書けるところっぽい。&lt;/p&gt;
+
+    </description>
+    </item>
+    
+    <item>
+    <title>Haskell覚え書き</title>
     <link>https://miso.sabanium.me/post/c-haskell1/</link>
     <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
     <author>sabanium</author>
@@ -24,18 +179,16 @@
     &lt;/a&gt;
     Haskellの文法について
 &lt;/h3&gt;
-&lt;h3 id=&#34;覚書&#34;&gt;
-    &lt;a href=&#34;#%e8%a6%9a%e6%9b%b8&#34; class=&#34;anchor&#34;&gt;
-        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
-            &lt;path fill-rule=&#34;evenodd&#34;
-                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
-            &lt;/path&gt;
-        &lt;/svg&gt;
-    &lt;/a&gt;
-    覚書
-&lt;/h3&gt;
-&lt;p&gt;他人のコードを読むときに忘れがちなこと。&lt;/p&gt;
-
+&lt;p&gt;よく見るやつ&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;型拘束&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(Ord a) =&amp;gt; a -&amp;gt; a
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;要素の存在&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(x:xs)
+&lt;/code&gt;&lt;/pre&gt;
     </description>
     </item>
     
