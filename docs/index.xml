@@ -24,11 +24,11 @@
     &lt;/a&gt;
     Applicative Functor
 &lt;/h3&gt;
-&lt;p&gt;FunctorはWrapperで、fmapを使えば(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。&lt;/p&gt;
+&lt;p&gt;FunctorはWrapperで、fmapを使えば&lt;code&gt;(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)&lt;/code&gt;という風にFunctorの要素に対して関数を適用できたのだった。&lt;/p&gt;
 &lt;p&gt;でもこれだと問題があって、例えば&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;f :: Int -&amp;gt; Int -&amp;gt; Int
 f a b = a * b
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;みたいな関数を&lt;code&gt;Maybe Int&lt;/code&gt;で置き換えて使おうと思ったときに使えない。
 というか単純に一変数関数にしか使えん。
 これはけっこうだるい。&lt;/p&gt;
 &lt;p&gt;そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。
@@ -37,17 +37,17 @@ f a b = a * b
   pure :: a -&amp;gt; f a
   (&amp;lt;*&amp;gt;) :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;ここで()に囲まれているのは演算子であることを思い出そう。
-すると、まずpureはある型 a からFunctor a型に移すようなものだとわかる。
-pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して&lt;/p&gt;
+すると、まず&lt;code&gt;pure&lt;/code&gt;はある型&lt;code&gt;a&lt;/code&gt;から&lt;code&gt;Functor a&lt;/code&gt;型に移すようなものだとわかる。
+&lt;code&gt;pure&lt;/code&gt;はfunctorのデフォルトであるべき（らしい）なので、簡単な例だと&lt;code&gt;Maybe&lt;/code&gt;に対して&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure a -&amp;gt; Just a
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;である。どこがpureなのかはいまいちよくわからない。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;である。どこが&lt;code&gt;pure&lt;/code&gt;なのかはいまいちよくわからない。&lt;/p&gt;
 &lt;p&gt;Haskellでは関数も型なので、こういうこともできる。ある項+1を取れば、&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure (+1) -&amp;gt; Just (+1)
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;このJust(+1)の型はMaybe(a -&amp;gt; a)である。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;この&lt;code&gt;Just(+1)&lt;/code&gt;の型は&lt;code&gt;Maybe(a -&amp;gt; a)&lt;/code&gt;である。&lt;/p&gt;
 &lt;p&gt;うん。まあなんとなくはわかった感がある。&lt;/p&gt;
-&lt;p&gt;次は(&amp;lt;*&amp;gt;)について。
+&lt;p&gt;次は&lt;code&gt;(&amp;lt;*&amp;gt;)&lt;/code&gt;について。
 なにこいつ、なまこっぽいみたいな感想が先に立つけどまあうん。
-実はよく見るとfmapに似ていることがわかる。&lt;/p&gt;
+実はよく見ると&lt;code&gt;fmap&lt;/code&gt;に似ていることがわかる。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;fmap :: (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b
 &amp;lt;*&amp;gt; :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;ここでの違いは、もう関数がFunctorに埋め込まれているかどうかだけ。&lt;/p&gt;
@@ -63,23 +63,95 @@ pureはfunctorのデフォルトであるべき（らしい）なので、簡単
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;なので、&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure fn &amp;lt;*&amp;gt; :: a -&amp;gt; f b
 fmap fn :: a -&amp;gt; f b
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;がいえる。ふう。もちろん、ここでfはFunctorの型でaは関数の引数である。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;がいえる。ふう。もちろん、ここで&lt;code&gt;f&lt;/code&gt;はFunctorの型で&lt;code&gt;a&lt;/code&gt;は関数の引数である。&lt;/p&gt;
 &lt;p&gt;いや、なんの役に立つねん。
-うーんと、実はなまこ&amp;lt;*&amp;gt;の重要性は関数を取ることにある。&lt;/p&gt;
-&lt;p&gt;&amp;lt;*&amp;gt;の引数はf(a -&amp;gt; b)といってるけど、このbがc -&amp;gt; d -&amp;gt; e型だった場合について考えよう。
-一回&amp;lt;*&amp;gt;を適用すると、返り値はf b だけどこれは実際には f( c -&amp;gt; d -&amp;gt; e )の型。
+うーんと、実はなまこ&lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt;の重要性は関数を取ることにある。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt;の引数は&lt;code&gt;f(a -&amp;gt; b)&lt;/code&gt;といってるけど、この&lt;code&gt;b&lt;/code&gt;が&lt;code&gt;c -&amp;gt; d -&amp;gt; e&lt;/code&gt;型だった場合について考えよう。
+一回&lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt;を適用すると、返り値は&lt;code&gt;f b&lt;/code&gt;だけどこれは実際には&lt;code&gt;f( c -&amp;gt; d -&amp;gt; e )&lt;/code&gt;の型。
 あれ？これってさっきと同じ形じゃない？
-そう、そのとおりで、cをa、d -&amp;gt; eをbと置き換えると、&amp;lt;*&amp;gt;をもう一回適用することでf(d -&amp;gt; e)がでて、結局f eの値が出ることになる。
-その過程で、入力にf a、f b、f c、f dの値が必要になる。
+そう、そのとおりで、&lt;code&gt;c&lt;/code&gt;を&lt;code&gt;a&lt;/code&gt;、&lt;code&gt;d -&amp;gt; e&lt;/code&gt;を&lt;code&gt;b&lt;/code&gt;と置き換えると、&lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt;をもう一回適用することで&lt;code&gt;f(d -&amp;gt; e)&lt;/code&gt;がでて、結局&lt;code&gt;f e&lt;/code&gt;の値が出ることになる。
+その過程で、入力に&lt;code&gt;f a&lt;/code&gt;、&lt;code&gt;f b&lt;/code&gt;、&lt;code&gt;f c&lt;/code&gt;、&lt;code&gt;f d&lt;/code&gt;の値が必要になる。
 これって引数が多い関数じゃない？そう。
 だから再帰的なアプローチを関数に対して取ることで（！？）うまく引数の多い関数を実装できるような仕組みができているのだった。&lt;/p&gt;
+&lt;h3 id=&#34;具体例&#34;&gt;
+    &lt;a href=&#34;#%e5%85%b7%e4%bd%93%e4%be%8b&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    具体例
+&lt;/h3&gt;
 &lt;p&gt;具体的な例を見よう。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pure (+) &amp;lt;*&amp;gt; Just a &amp;lt;*&amp;gt; Just b
+== (Just (+) &amp;lt;*&amp;gt; Just a) &amp;lt;*&amp;gt; Just b
+== Just (+a) &amp;lt;*&amp;gt; Just b
+== Just (a+b)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;これは別に&lt;code&gt;fmap&lt;/code&gt;でもいい気もする。&lt;/p&gt;
+&lt;p&gt;こんな関数を考えると&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;quadratic :: Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int -&amp;gt; Int
+quadratic a b c x = a * x ^ 2 + b * x + c
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;pure&lt;/code&gt;と&lt;code&gt;fmap&lt;/code&gt;で書いたこれらが等価であることがわかる。
+&lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt;は&lt;code&gt;fmap&lt;/code&gt;の略記。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;quadratic &amp;lt;$&amp;gt; (Just 3) &amp;lt;*&amp;gt; (Just 4) &amp;lt;*&amp;gt; (Just (-2)) &amp;lt;*&amp;gt; (Just 9)
+pure quadratic &amp;lt;*&amp;gt; (Just 3) &amp;lt;*&amp;gt; (Just 4) &amp;lt;*&amp;gt; (Just (-2)) &amp;lt;*&amp;gt; (Just 9)
+== Just(quadratic 3 4 (-2) 9)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;他に、&lt;code&gt;Applicative Maybe&lt;/code&gt;についても考えることができる。
+&lt;code&gt;Nothing&lt;/code&gt;が片方の項にあるなら&lt;code&gt;Nothing&lt;/code&gt;、それ以外は&lt;code&gt;Just&lt;/code&gt;を返せばいいので&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;instance Applicative Maybe where
+  pure = Just
+  (Just f) &amp;lt;*&amp;gt; (Just x) = Just (f x)
+  _ &amp;lt;*&amp;gt; _ = Nothing
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;はい。いい感じだね。&lt;/p&gt;
+&lt;p&gt;具体例についてはまたどっかで追記するかもしれない。&lt;/p&gt;
+&lt;h3 id=&#34;法則について&#34;&gt;
+    &lt;a href=&#34;#%e6%b3%95%e5%89%87%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    法則について
+&lt;/h3&gt;
+&lt;p&gt;守らなきゃいけない法則がある。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;恒等的な関数の存在&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  pure id &amp;lt;*&amp;gt; x == x
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;これはFunctor側の&lt;code&gt;fmap&lt;/code&gt;で確かめられていても、こっちで確かめなきゃいけない。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;合成則&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  pure (.) &amp;lt;*&amp;gt; u &amp;lt;*&amp;gt; v &amp;lt;*&amp;gt; w == u &amp;lt;*&amp;gt; (v &amp;lt;*&amp;gt; w)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;うーんと、何が言いたいかいまいちよくわからない感じがするけど&lt;code&gt;(u . v) w == u (v w)&lt;/code&gt;とFunctorなしの表記にするとわかりやすいのかな。
+ここで&lt;code&gt;u&lt;/code&gt;と&lt;code&gt;v&lt;/code&gt;はapplicative functorの中の関数なので、先に関数を合成して計算しても、関数の結果に関数を適用しても値が同じことを保証しなければならないことを言っている。
+参照透過性とかと関係あるかは不明。&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;準同型&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  pure f &amp;lt;*&amp;gt; pure x == pure (f x)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;気持ち的には自明っていいたい！が証明は必要。
+&lt;code&gt;pure f &amp;lt;*&amp;gt; y&lt;/code&gt;とすれば、&lt;code&gt;f y&lt;/code&gt;から&lt;code&gt;f (f x)&lt;/code&gt;より&lt;code&gt;pure (f x)&lt;/code&gt;っぽい。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;交換則&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  f &amp;lt;*&amp;gt; pure x == pure ($ x) &amp;lt;*&amp;gt; f
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;割と意味わからん。ここはあとで追記。&lt;/p&gt;
+&lt;h3 id=&#34;補足&#34;&gt;
+    &lt;a href=&#34;#%e8%a3%9c%e8%b6%b3&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    補足
+&lt;/h3&gt;
+&lt;p&gt;要はApplicative Functorは一つの国みたいなもので、&lt;code&gt;pure&lt;/code&gt;はそこに連れて行くためのコンストラクタ、&lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt;はその中で関数を適用するための演算子として捉えるとわかりやすいのかな。&lt;/p&gt;
+&lt;p&gt;おわり。&lt;/p&gt;
 
-
-
-
-&lt;/code&gt;&lt;/pre&gt;
     </description>
     </item>
     

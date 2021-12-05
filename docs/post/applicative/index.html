@@ -45,7 +45,7 @@
     },
     "datePublished": "2021-12-05",
     "description": "",
-    "wordCount":  186 ,
+    "wordCount":  372 ,
     "mainEntityOfPage": "True",
     "dateModified": "2021-12-05",
     "publisher": {
@@ -118,7 +118,7 @@
                               
                             
                             By  | <time>December 05, 2021</time>
-                            | 1 minutes
+                            | 2 minutes
                         </div>
                         <div class="tags">
                             
@@ -145,11 +145,11 @@
     </a>
     Applicative Functor
 </h3>
-<p>FunctorはWrapperで、fmapを使えば(a -&gt; b)-&gt;(f a -&gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。</p>
+<p>FunctorはWrapperで、fmapを使えば<code>(a -&gt; b)-&gt;(f a -&gt; f b)</code>という風にFunctorの要素に対して関数を適用できたのだった。</p>
 <p>でもこれだと問題があって、例えば</p>
 <pre tabindex="0"><code>f :: Int -&gt; Int -&gt; Int
 f a b = a * b
-</code></pre><p>みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。
+</code></pre><p>みたいな関数を<code>Maybe Int</code>で置き換えて使おうと思ったときに使えない。
 というか単純に一変数関数にしか使えん。
 これはけっこうだるい。</p>
 <p>そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。
@@ -158,17 +158,17 @@ f a b = a * b
   pure :: a -&gt; f a
   (&lt;*&gt;) :: f (a -&gt; b) -&gt; f a -&gt; f b
 </code></pre><p>ここで()に囲まれているのは演算子であることを思い出そう。
-すると、まずpureはある型 a からFunctor a型に移すようなものだとわかる。
-pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して</p>
+すると、まず<code>pure</code>はある型<code>a</code>から<code>Functor a</code>型に移すようなものだとわかる。
+<code>pure</code>はfunctorのデフォルトであるべき（らしい）なので、簡単な例だと<code>Maybe</code>に対して</p>
 <pre tabindex="0"><code>pure a -&gt; Just a
-</code></pre><p>である。どこがpureなのかはいまいちよくわからない。</p>
+</code></pre><p>である。どこが<code>pure</code>なのかはいまいちよくわからない。</p>
 <p>Haskellでは関数も型なので、こういうこともできる。ある項+1を取れば、</p>
 <pre tabindex="0"><code>pure (+1) -&gt; Just (+1)
-</code></pre><p>このJust(+1)の型はMaybe(a -&gt; a)である。</p>
+</code></pre><p>この<code>Just(+1)</code>の型は<code>Maybe(a -&gt; a)</code>である。</p>
 <p>うん。まあなんとなくはわかった感がある。</p>
-<p>次は(&lt;*&gt;)について。
+<p>次は<code>(&lt;*&gt;)</code>について。
 なにこいつ、なまこっぽいみたいな感想が先に立つけどまあうん。
-実はよく見るとfmapに似ていることがわかる。</p>
+実はよく見ると<code>fmap</code>に似ていることがわかる。</p>
 <pre tabindex="0"><code>fmap :: (a -&gt; b) -&gt; f a -&gt; f b
 &lt;*&gt; :: f (a -&gt; b) -&gt; f a -&gt; f b
 </code></pre><p>ここでの違いは、もう関数がFunctorに埋め込まれているかどうかだけ。</p>
@@ -184,23 +184,95 @@ pureはfunctorのデフォルトであるべき（らしい）なので、簡単
 </code></pre><p>なので、</p>
 <pre tabindex="0"><code>pure fn &lt;*&gt; :: a -&gt; f b
 fmap fn :: a -&gt; f b
-</code></pre><p>がいえる。ふう。もちろん、ここでfはFunctorの型でaは関数の引数である。</p>
+</code></pre><p>がいえる。ふう。もちろん、ここで<code>f</code>はFunctorの型で<code>a</code>は関数の引数である。</p>
 <p>いや、なんの役に立つねん。
-うーんと、実はなまこ&lt;*&gt;の重要性は関数を取ることにある。</p>
-<p>&lt;*&gt;の引数はf(a -&gt; b)といってるけど、このbがc -&gt; d -&gt; e型だった場合について考えよう。
-一回&lt;*&gt;を適用すると、返り値はf b だけどこれは実際には f( c -&gt; d -&gt; e )の型。
+うーんと、実はなまこ<code>&lt;*&gt;</code>の重要性は関数を取ることにある。</p>
+<p><code>&lt;*&gt;</code>の引数は<code>f(a -&gt; b)</code>といってるけど、この<code>b</code>が<code>c -&gt; d -&gt; e</code>型だった場合について考えよう。
+一回<code>&lt;*&gt;</code>を適用すると、返り値は<code>f b</code>だけどこれは実際には<code>f( c -&gt; d -&gt; e )</code>の型。
 あれ？これってさっきと同じ形じゃない？
-そう、そのとおりで、cをa、d -&gt; eをbと置き換えると、&lt;*&gt;をもう一回適用することでf(d -&gt; e)がでて、結局f eの値が出ることになる。
-その過程で、入力にf a、f b、f c、f dの値が必要になる。
+そう、そのとおりで、<code>c</code>を<code>a</code>、<code>d -&gt; e</code>を<code>b</code>と置き換えると、<code>&lt;*&gt;</code>をもう一回適用することで<code>f(d -&gt; e)</code>がでて、結局<code>f e</code>の値が出ることになる。
+その過程で、入力に<code>f a</code>、<code>f b</code>、<code>f c</code>、<code>f d</code>の値が必要になる。
 これって引数が多い関数じゃない？そう。
 だから再帰的なアプローチを関数に対して取ることで（！？）うまく引数の多い関数を実装できるような仕組みができているのだった。</p>
+<h3 id="具体例">
+    <a href="#%e5%85%b7%e4%bd%93%e4%be%8b" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    具体例
+</h3>
 <p>具体的な例を見よう。</p>
-<pre tabindex="0"><code>
+<pre tabindex="0"><code>pure (+) &lt;*&gt; Just a &lt;*&gt; Just b
+== (Just (+) &lt;*&gt; Just a) &lt;*&gt; Just b
+== Just (+a) &lt;*&gt; Just b
+== Just (a+b)
+</code></pre><p>これは別に<code>fmap</code>でもいい気もする。</p>
+<p>こんな関数を考えると</p>
+<pre tabindex="0"><code>quadratic :: Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int
+quadratic a b c x = a * x ^ 2 + b * x + c
+</code></pre><p><code>pure</code>と<code>fmap</code>で書いたこれらが等価であることがわかる。
+<code>&lt;$&gt;</code>は<code>fmap</code>の略記。</p>
+<pre tabindex="0"><code>quadratic &lt;$&gt; (Just 3) &lt;*&gt; (Just 4) &lt;*&gt; (Just (-2)) &lt;*&gt; (Just 9)
+pure quadratic &lt;*&gt; (Just 3) &lt;*&gt; (Just 4) &lt;*&gt; (Just (-2)) &lt;*&gt; (Just 9)
+== Just(quadratic 3 4 (-2) 9)
+</code></pre><p>他に、<code>Applicative Maybe</code>についても考えることができる。
+<code>Nothing</code>が片方の項にあるなら<code>Nothing</code>、それ以外は<code>Just</code>を返せばいいので</p>
+<pre tabindex="0"><code>instance Applicative Maybe where
+  pure = Just
+  (Just f) &lt;*&gt; (Just x) = Just (f x)
+  _ &lt;*&gt; _ = Nothing
+</code></pre><p>はい。いい感じだね。</p>
+<p>具体例についてはまたどっかで追記するかもしれない。</p>
+<h3 id="法則について">
+    <a href="#%e6%b3%95%e5%89%87%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    法則について
+</h3>
+<p>守らなきゃいけない法則がある。</p>
+<ol>
+<li>恒等的な関数の存在</li>
+</ol>
+<pre tabindex="0"><code>  pure id &lt;*&gt; x == x
+</code></pre><p>これはFunctor側の<code>fmap</code>で確かめられていても、こっちで確かめなきゃいけない。</p>
+<ol start="2">
+<li>合成則</li>
+</ol>
+<pre tabindex="0"><code>  pure (.) &lt;*&gt; u &lt;*&gt; v &lt;*&gt; w == u &lt;*&gt; (v &lt;*&gt; w)
+</code></pre><p>うーんと、何が言いたいかいまいちよくわからない感じがするけど<code>(u . v) w == u (v w)</code>とFunctorなしの表記にするとわかりやすいのかな。
+ここで<code>u</code>と<code>v</code>はapplicative functorの中の関数なので、先に関数を合成して計算しても、関数の結果に関数を適用しても値が同じことを保証しなければならないことを言っている。
+参照透過性とかと関係あるかは不明。</p>
+<ol start="3">
+<li>準同型</li>
+</ol>
+<pre tabindex="0"><code>  pure f &lt;*&gt; pure x == pure (f x)
+</code></pre><p>気持ち的には自明っていいたい！が証明は必要。
+<code>pure f &lt;*&gt; y</code>とすれば、<code>f y</code>から<code>f (f x)</code>より<code>pure (f x)</code>っぽい。</p>
+<ol start="4">
+<li>交換則</li>
+</ol>
+<pre tabindex="0"><code>  f &lt;*&gt; pure x == pure ($ x) &lt;*&gt; f
+</code></pre><p>割と意味わからん。ここはあとで追記。</p>
+<h3 id="補足">
+    <a href="#%e8%a3%9c%e8%b6%b3" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    補足
+</h3>
+<p>要はApplicative Functorは一つの国みたいなもので、<code>pure</code>はそこに連れて行くためのコンストラクタ、<code>&lt;*&gt;</code>はその中で関数を適用するための演算子として捉えるとわかりやすいのかな。</p>
+<p>おわり。</p>
 
-
-
-
-</code></pre>
     </div>
 </div>
 

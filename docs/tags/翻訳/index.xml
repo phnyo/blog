@@ -18,7 +18,7 @@
 でもこれだと問題があって、例えば
 f :: Int -&amp;gt; Int -&amp;gt; Int f a b = a * b みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。 というか単純に一変数関数にしか使えん。 これはけっこうだるい。
 そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。 まずは関数定義から見てみよう。
-class functor f =&amp;gt; Applicative f where pure :: a -&amp;gt; f a (&amp;lt;*&amp;gt;) :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b ここで()に囲まれているのは演算子であることを思い出そう。 すると、まずpureはある型 a からFunctor a型に移すようなものだとわかる。 pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して
+class functor f =&amp;gt; Applicative f where pure :: a -&amp;gt; f a (&amp;lt;*&amp;gt;) :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b ここで()に囲まれているのは演算子であることを思い出そう。 すると、まずpureはある型aからFunctor a型に移すようなものだとわかる。 pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して
 pure a -&amp;gt; Just a である。どこがpureなのかはいまいちよくわからない。</description>
     </item>
     
