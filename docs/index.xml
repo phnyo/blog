@@ -1,20 +1,171 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>鯖の味噌煮をおいしく炊けない</title>
+    <title>鯖の味噌煮がおいしく炊けない</title>
     <link>https://miso.sabanium.me/</link>
-    <description>Recent content on 鯖の味噌煮をおいしく炊けない</description>
+    <description>Recent content on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sun, 05 Dec 2021 11:22:10 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Dec 2021 11:20:40 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+    <title>The Road to Monads: Monadについて</title>
+    <link>https://miso.sabanium.me/post/monad/</link>
+    <pubDate>Mon, 06 Dec 2021 11:20:40 +0900</pubDate>
+    <author>sabanium</author>
+    <guid>https://miso.sabanium.me/post/monad/</guid>
+    <description>
+        &lt;p&gt;この記事は&lt;a href=&#34;https://oliverbalfour.github.io/haskell/2020/08/08/understanding-monads-haskell.html&#34;&gt;The Road to Monads&lt;/a&gt;を意訳したものであり、&lt;a href=&#34;https://adventar.org/calendars/6389&#34;&gt;RICORA Advent Calendar&lt;/a&gt;の11日目の記事です。&lt;/p&gt;
+&lt;h2 id=&#34;monad&#34;&gt;
+    &lt;a href=&#34;#monad&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    Monad
+&lt;/h2&gt;
+&lt;p&gt;今までの流れを振り返ると、&lt;a href=&#34;https://miso.sabanium.me/post/functor&#34;&gt;Functor&lt;/a&gt;は何らかの値のWrapperであり、&lt;code&gt;fmap&lt;/code&gt;によってその要素に関数適用ができた。
+&lt;a href=&#34;https://miso.sabanium.me/post/applicative&#34;&gt;Applicative Functor&lt;/a&gt;はそれをさらに発展させて、関数自体をFunctorで包むことによって、複数の引数を取る関数を実装できるようにしていたのだった。&lt;/p&gt;
+&lt;p&gt;さて、何が足りないのだろう？
+実は、Applicative Functorだけでは関数を複数組み合わせることが難しい。
+例えば、&lt;code&gt;f :: a -&amp;gt; b&lt;/code&gt;と&lt;code&gt;g :: b -&amp;gt; c&lt;/code&gt;があったときに、Applicative Functorだと&lt;code&gt;a -&amp;gt; f b&lt;/code&gt;、&lt;code&gt;b -&amp;gt; f c&lt;/code&gt;に写すことはできても&lt;code&gt;a -&amp;gt; f c&lt;/code&gt;に写すことができない。
+こういう関数の使い方をする機会は割と多い気がするし、こんな感じで書きたくない？という話。&lt;/p&gt;
+&lt;p&gt;簡単にいえば、MonadはFunctorの中での関数合成を可能にする構造。
+しかし、これだけだとMonadが実際に何をするかいまいちわからないので以下に書いていく。
+導入として、大体FunctorみたいなものだとしてMonad&lt;code&gt;m&lt;/code&gt;を使うことにしよう。&lt;/p&gt;
+&lt;p&gt;じつはMonadは他の必要っぽいことも包摂してくれている。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Monad上の関数の繰り返し適用に対して、Monadを圧縮する。&lt;code&gt;a -&amp;gt; m b&lt;/code&gt;に対してまたfmapをつかって&lt;code&gt;m&lt;/code&gt;を適用すると、&lt;code&gt;m a -&amp;gt; m (m -&amp;gt; b)&lt;/code&gt;になってしまう。
+例えば、&lt;code&gt;a -&amp;gt; Maybe b&lt;/code&gt;なら&lt;code&gt;Maybe a -&amp;gt; Maybe ( Maybe b )&lt;/code&gt;的な。
+これを圧縮して、繰り返し適用しても&lt;code&gt;a -&amp;gt; Maybe b&lt;/code&gt;の型を作れるようにする。&lt;/li&gt;
+&lt;li&gt;さっきの例。
+&lt;code&gt;a -&amp;gt; m b&lt;/code&gt;と&lt;code&gt;b -&amp;gt; m c&lt;/code&gt;から&lt;code&gt;a -&amp;gt; m c&lt;/code&gt;の関数を作りだせる。&lt;/li&gt;
+&lt;li&gt;逆に&lt;code&gt;m a&lt;/code&gt;が与えられたとき、&lt;code&gt;a -&amp;gt; m b&lt;/code&gt;の関数を使えるようにする。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;型の圧縮&#34;&gt;
+    &lt;a href=&#34;#%e5%9e%8b%e3%81%ae%e5%9c%a7%e7%b8%ae&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    型の圧縮
+&lt;/h3&gt;
+&lt;p&gt;まあこれだけだとよくわからないので、具体例を考えよう。
+&lt;code&gt;1 / sqrt (x)&lt;/code&gt;を&lt;code&gt;Maybe&lt;/code&gt;を返すとして考える。
+この関数を二つの関数&lt;code&gt;1 / x&lt;/code&gt;と&lt;code&gt;sqrt(x)&lt;/code&gt;の合成で考えるとすると、例えば&lt;code&gt;1/0&lt;/code&gt;はundefinedなので、&lt;code&gt;1 / x&lt;/code&gt;で&lt;code&gt;x = 0&lt;/code&gt;なら&lt;code&gt;Nothing&lt;/code&gt;を返したい。
+これは&lt;code&gt;sqrt(x)&lt;/code&gt;でも一緒。&lt;code&gt;x &amp;lt; 0&lt;/code&gt;なら&lt;code&gt;Nothing&lt;/code&gt;を返したい。
+そこで、これらを実際に書いてみるとこんな感じ。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;safeInverse :: Double -&amp;gt; Maybe Double
+safeInverse 0 = Nothing
+safeInverse _ = Just(1/x)
+
+safeSqrt :: Double -&amp;gt; Maybe Double
+safeSqrt x = case signum x of
+  (-1) -&amp;gt; Nothing
+  _ -&amp;gt; Just (sqrt x)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;ここで&lt;code&gt;signum&lt;/code&gt;は符号を返す関数。&lt;/p&gt;
+&lt;p&gt;まあこれだけで完結するんだったらいいんだけど、もっとでかいプログラムの一部に組み込むなら&lt;code&gt;Maybe&lt;/code&gt;の場合分けをし続けることになる。
+めんどくさい犬の散歩みたいだ。
+&lt;code&gt;fmap&lt;/code&gt;をつかってもいいかもしれないけど、&lt;code&gt;fmap&lt;/code&gt;を使うと&lt;code&gt;1 / sqrt(x)&lt;/code&gt;の関数の型が&lt;code&gt;a -&amp;gt; Maybe (Maybe b)&lt;/code&gt;になってしまう。
+これをもっとでかい関数の一部として使うとすると&amp;hellip;大変なことになりそうだ。&lt;/p&gt;
+&lt;p&gt;それを避けるために、&lt;code&gt;join&lt;/code&gt;という関数を考える。
+&lt;code&gt;Maybe&lt;/code&gt;に対してはこんな感じで書ける。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;join :: Maybe (Maybe a) -&amp;gt; Maybe a
+join (Just x) = x
+join Nothing = Nothing
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;これは圧縮そのものだから、実際に&lt;code&gt;1 / sqrt(x)&lt;/code&gt;を書くと&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sqrtInverse :: Double -&amp;gt; Maybe Double
+sqrtInverse = join ( fmap safeInverse (safeSqrt x))
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;こんな感じ。
+確認だけど、&lt;code&gt;fmap SafeInverse (safeSqrt x)&lt;/code&gt;が&lt;code&gt;Double -&amp;gt; Maybe (Maybe Double)&lt;/code&gt;型の関数なので、&lt;code&gt;join&lt;/code&gt;を使うと&lt;code&gt;Double -&amp;gt; Maybe Double&lt;/code&gt;になる。&lt;/p&gt;
+&lt;p&gt;この&lt;code&gt;join&lt;/code&gt;は実際にこんな感じに一般化できるらしい。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;join :: Monad m =&amp;gt; m (m a) -&amp;gt; m a
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;関数の合成&#34;&gt;
+    &lt;a href=&#34;#%e9%96%a2%e6%95%b0%e3%81%ae%e5%90%88%e6%88%90&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    関数の合成
+&lt;/h3&gt;
+&lt;p&gt;この&lt;code&gt;sqrtInverse&lt;/code&gt;を関数の合成の観点から見てみよう。
+さっきと同じように普通の値を取ってMonad内部の値を返すような関数を二つ考えて、それらを普通の値を取ってMonadの値として返す関数を想定するとき、&lt;code&gt;&amp;gt;=&amp;gt;&lt;/code&gt;という演算子を使うことができる。
+例えば&lt;code&gt;f :: a -&amp;gt; m b&lt;/code&gt;と&lt;code&gt;g :: b -&amp;gt; m c&lt;/code&gt;があるとき、&lt;code&gt;f &amp;gt;=&amp;gt; g&lt;/code&gt;は&lt;code&gt;a -&amp;gt; m c&lt;/code&gt;という型になる。
+この&lt;code&gt;&amp;gt;=&amp;gt;&lt;/code&gt;演算子は魚に似ている（？）のでfish演算子と呼ばれ、この合成自体はKleisli(クライスリ)合成というらしい。&lt;/p&gt;
+&lt;p&gt;実際にこのfish演算子が使われている所を見てみよう。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(&amp;gt;=&amp;gt;) :: (a -&amp;gt; Maybe b) -&amp;gt; (b -&amp;gt; Maybe c) -&amp;gt; (a -&amp;gt; Maybe c)
+f &amp;gt;=&amp;gt; g = \x -&amp;gt; case f x of
+  Just x -&amp;gt; g x
+  Nothing -&amp;gt; Nothing
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;うん。
+まず一行目はfish演算子を定義した通りの定義になっている。
+そこで、二行目以降ではMonadがMaybeなので、&lt;code&gt;f x&lt;/code&gt;は&lt;code&gt;Just x&lt;/code&gt;か&lt;code&gt;Nothing&lt;/code&gt;を返し、&lt;code&gt;Just x&lt;/code&gt;ならunwrapして&lt;code&gt;g x&lt;/code&gt;を返すようにパターンマッチングしてあげている。&lt;/p&gt;
+&lt;p&gt;このfish演算子を実際にさっきの&lt;code&gt;sqrtInverse&lt;/code&gt;に使おう。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sqrtInverse :: Double -&amp;gt; Maybe Double
+sqrtInverse = safeSqrt &amp;gt;=&amp;gt; safeInverse
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;だいぶ短くなったし、これで明示的にパターンマッチングの処理をしなくてよくなったのでだいぶ見通しが良くなるはずだ。&lt;/p&gt;
+&lt;p&gt;でもこれにはまだ問題がある。
+Monadの中の値を使うときに恒等射的な関数を考える必要が出てくるのだ。
+例えば&lt;code&gt;m a&lt;/code&gt;という値に対して&lt;code&gt;m a -&amp;gt; a&lt;/code&gt;という関数を作り、fish演算子を使う必要がある。
+これだとまた型に合わせるための関数を作って見通しがまた良くなくなってしまう。&lt;/p&gt;
+&lt;p&gt;実際にそういう例を見てみよう。
+&lt;code&gt;const a b = a&lt;/code&gt;という関数を考えれば、&lt;code&gt;Just 5&lt;/code&gt;を計算するために&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(const (Just 4) &amp;gt;=&amp;gt; (\x -&amp;gt; Just (x+1))) ()
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;とする必要がある。
+ごちゃごちゃしててわかりにくいから型を確かめよう。
+&lt;code&gt;\x -&amp;gt; Just(x + 1)&lt;/code&gt;は&lt;code&gt;Int -&amp;gt; Maybe Int&lt;/code&gt;という型なので、fish演算子の引数を考えると&lt;code&gt;const (Just 4)&lt;/code&gt;は&lt;code&gt;Int -&amp;gt; Maybe Int&lt;/code&gt;という型のはず。
+でも&lt;code&gt;Just 4&lt;/code&gt;は&lt;code&gt;Maybe Int&lt;/code&gt;型なので&amp;hellip;ここはあとで見返して追記します。&lt;/p&gt;
+&lt;h3 id=&#34;連続的に計算させる&#34;&gt;
+    &lt;a href=&#34;#%e9%80%a3%e7%b6%9a%e7%9a%84%e3%81%ab%e8%a8%88%e7%ae%97%e3%81%95%e3%81%9b%e3%82%8b&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    連続的に計算させる
+&lt;/h3&gt;
+&lt;p&gt;では、別の演算子&lt;code&gt;(&amp;gt;&amp;gt;=) :: m a -&amp;gt; (a -&amp;gt; m b) -&amp;gt; m b&lt;/code&gt;を考えよう。
+これをbind(演算子?)と呼ぶ。&lt;/p&gt;
+&lt;p&gt;Maybeに対して実装するとこんな感じ。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(&amp;gt;&amp;gt;=) :: Maybe a -&amp;gt; (a -&amp;gt; Maybe b) -&amp;gt; Maybe b
+x (&amp;gt;&amp;gt;=) f = case x of
+  (Just x&#39;) -&amp;gt; f x&#39;
+  Nothing -&amp;gt; Nothing
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;ここで&lt;code&gt;x&lt;/code&gt;は&lt;code&gt;Maybe x&#39;&lt;/code&gt;という型だとした。&lt;/p&gt;
+&lt;p&gt;さっきの&lt;code&gt;sqrtInverse&lt;/code&gt;をまた拾ってこよう。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sqrtInverse :: Double -&amp;gt; Maybe Double
+sqrtInverse x = safeSqrt x &amp;gt;&amp;gt;= safeInverse
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;他の例としてこういうのもある。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Just 3 &amp;gt;&amp;gt;= (\x -&amp;gt; Just (x + 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;これはもちろん&lt;code&gt;Just 4&lt;/code&gt;を返す。&lt;/p&gt;
+&lt;p&gt;実際、bindはfish演算子や&lt;code&gt;join&lt;/code&gt;より使いやすい。
+でも、結局bindでやっていることはfish演算子や&lt;code&gt;join&lt;/code&gt;を使って遠回りしてできることと同じだ。&lt;/p&gt;
+&lt;p&gt;bind、fishと&lt;code&gt;join&lt;/code&gt;からお互いを作れることを示そう。&lt;/p&gt;
+&lt;p&gt;思い返せば、それぞれの型はこんな感じであった。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;join :: m (m a) -&amp;gt; m a
+(&amp;gt;=&amp;gt;) :: (a -&amp;gt; m b) -&amp;gt; (b -&amp;gt; m c) -&amp;gt; (a -&amp;gt; m c)
+(&amp;gt;&amp;gt;=) :: m a -&amp;gt; (a -&amp;gt; m b) -&amp;gt; m b
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;そこで、&lt;code&gt;join&lt;/code&gt;を作ってみよう。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;join x = x &amp;gt;&amp;gt;= id
+join x = const x &amp;gt;=&amp;gt; id
+&lt;/code&gt;&lt;/pre&gt;
+    </description>
+    </item>
+    
     <item>
     <title>The Road to Monads: Applicativeについて</title>
     <link>https://miso.sabanium.me/post/applicative/</link>
     <pubDate>Sun, 05 Dec 2021 11:22:10 +0900</pubDate>
-    
+    <author>sabanium</author>
     <guid>https://miso.sabanium.me/post/applicative/</guid>
     <description>
-        &lt;p&gt;&lt;a href=&#34;https://miso.sabanium.me/post/functor/&#34;&gt;Functorについての覚え書き&lt;/a&gt;の続き。&lt;/p&gt;
-&lt;h3 id=&#34;applicative-functor&#34;&gt;
+        &lt;p&gt;この記事は&lt;a href=&#34;https://oliverbalfour.github.io/haskell/2020/08/06/applicative-functors.html&#34;&gt;The Road to Monads&lt;/a&gt;を意訳したものであり、&lt;a href=&#34;https://adventar.org/calendars/6389&#34;&gt;RICORA Advent Calendar&lt;/a&gt;の9日目の記事です。&lt;/p&gt;
+&lt;h2 id=&#34;applicative-functor&#34;&gt;
     &lt;a href=&#34;#applicative-functor&#34; class=&#34;anchor&#34;&gt;
         &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
             &lt;path fill-rule=&#34;evenodd&#34;
@@ -23,8 +174,8 @@
         &lt;/svg&gt;
     &lt;/a&gt;
     Applicative Functor
-&lt;/h3&gt;
-&lt;p&gt;FunctorはWrapperで、fmapを使えば&lt;code&gt;(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)&lt;/code&gt;という風にFunctorの要素に対して関数を適用できたのだった。&lt;/p&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://miso.sabanium.me/post/functor&#34;&gt;Functor&lt;/a&gt;はWrapperで、fmapを使えば&lt;code&gt;(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)&lt;/code&gt;という風にFunctorの要素に対して関数を適用できたのだった。&lt;/p&gt;
 &lt;p&gt;でもこれだと問題があって、例えば&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;f :: Int -&amp;gt; Int -&amp;gt; Int
 f a b = a * b
@@ -162,9 +313,9 @@ pure quadratic &amp;lt;*&amp;gt; (Just 3) &amp;lt;*&amp;gt; (Just 4) &amp;lt;*&a
     <author>sabanium</author>
     <guid>https://miso.sabanium.me/post/functor/</guid>
     <description>
-        &lt;p&gt;&lt;a href=&#34;https://oliverbalfour.github.io/haskell/2020/08/04/functors-in-haskell.html&#34;&gt;これ&lt;/a&gt;を読む。
+        &lt;p&gt;この記事は&lt;a href=&#34;https://oliverbalfour.github.io/haskell/2020/08/04/functors-in-haskell.html&#34;&gt;The Road to Monads&lt;/a&gt;を意訳したものです。
 あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので。&lt;/p&gt;
-&lt;h3 id=&#34;functor&#34;&gt;
+&lt;h2 id=&#34;functor&#34;&gt;
     &lt;a href=&#34;#functor&#34; class=&#34;anchor&#34;&gt;
         &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
             &lt;path fill-rule=&#34;evenodd&#34;
@@ -173,7 +324,7 @@ pure quadratic &amp;lt;*&amp;gt; (Just 3) &amp;lt;*&amp;gt; (Just 4) &amp;lt;*&a
         &lt;/svg&gt;
     &lt;/a&gt;
     Functor
-&lt;/h3&gt;
+&lt;/h2&gt;
 &lt;p&gt;Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。&lt;/p&gt;
 &lt;p&gt;コードでの具体例：&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;addMaybe :: Num a =&amp;gt; Maybe a -&amp;gt; Maybe a -&amp;gt; Maybe a

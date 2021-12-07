@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="theme-color" content="dark">
-    <title>The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない</title>
+    <title>The Road to Monads: Applicativeについて | 鯖の味噌煮がおいしく炊けない</title>
 
     
     
     
     <meta property="og:site_name" content="" />
-    <meta property="og:title" content="The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない"/>
-    <meta itemprop="name" content="The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない" />
-    <meta name="twitter:title" content="The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない" />
-    <meta name="application-name" content="The Road to Monads: Applicativeについて | 鯖の味噌煮をおいしく炊けない" />
+    <meta property="og:title" content="The Road to Monads: Applicativeについて | 鯖の味噌煮がおいしく炊けない"/>
+    <meta itemprop="name" content="The Road to Monads: Applicativeについて | 鯖の味噌煮がおいしく炊けない" />
+    <meta name="twitter:title" content="The Road to Monads: Applicativeについて | 鯖の味噌煮がおいしく炊けない" />
+    <meta name="application-name" content="The Road to Monads: Applicativeについて | 鯖の味噌煮がおいしく炊けない" />
 
 
     <meta name="description" content="" />
@@ -31,6 +31,10 @@
 <meta property="article:published_time" content=2021-12-05T11:22:10&#43;0900 />
 
 
+  <meta property="og:article:author" content="Sabanium" />
+  <meta property="article:author" content="Sabanium" />
+  <meta name="author" content="Sabanium" />
+
 
 
 
@@ -45,7 +49,7 @@
     },
     "datePublished": "2021-12-05",
     "description": "",
-    "wordCount":  372 ,
+    "wordCount":  377 ,
     "mainEntityOfPage": "True",
     "dateModified": "2021-12-05",
     "publisher": {
@@ -90,7 +94,7 @@
                 <a class="brand" href="/">
                     
                     
-                    鯖の味噌煮をおいしく炊けない
+                    鯖の味噌煮がおいしく炊けない
                     </a>
             </div>
             <div class="flex">
@@ -115,9 +119,7 @@
                         <div>
                             
                             
-                              
-                            
-                            By  | <time>December 05, 2021</time>
+                            By sabanium | <time>December 05, 2021</time>
                             | 2 minutes
                         </div>
                         <div class="tags">
@@ -134,8 +136,8 @@
     </article>
 
     <div class="article-post">
-    <p><a href="/post/functor/">Functorについての覚え書き</a>の続き。</p>
-<h3 id="applicative-functor">
+    <p>この記事は<a href="https://oliverbalfour.github.io/haskell/2020/08/06/applicative-functors.html">The Road to Monads</a>を意訳したものであり、<a href="https://adventar.org/calendars/6389">RICORA Advent Calendar</a>の9日目の記事です。</p>
+<h2 id="applicative-functor">
     <a href="#applicative-functor" class="anchor">
         <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
             <path fill-rule="evenodd"
@@ -144,8 +146,8 @@
         </svg>
     </a>
     Applicative Functor
-</h3>
-<p>FunctorはWrapperで、fmapを使えば<code>(a -&gt; b)-&gt;(f a -&gt; f b)</code>という風にFunctorの要素に対して関数を適用できたのだった。</p>
+</h2>
+<p><a href="/post/functor">Functor</a>はWrapperで、fmapを使えば<code>(a -&gt; b)-&gt;(f a -&gt; f b)</code>という風にFunctorの要素に対して関数を適用できたのだった。</p>
 <p>でもこれだと問題があって、例えば</p>
 <pre tabindex="0"><code>f :: Int -&gt; Int -&gt; Int
 f a b = a * b
@@ -286,6 +288,11 @@ pure quadratic &lt;*&gt; (Just 3) &lt;*&gt; (Just 4) &lt;*&gt; (Just (-2)) &lt;*
             </a>
         
         
+        
+        <a rel="next" href="/post/monad/" title="Next post (newer)">
+            <span>Next</span>
+            The Road to Monads: Monadについて
+            </a> 
         
     </nav>
     

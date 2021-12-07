@@ -4,13 +4,14 @@ date: 2021-12-05T11:22:10+09:00
 tags:
 - Haskell
 - 翻訳
+author: sabanium
 ---
 
-[Functorについての覚え書き](/post/functor/)の続き。
+この記事は[The Road to Monads](https://oliverbalfour.github.io/haskell/2020/08/06/applicative-functors.html)を意訳したものであり、[RICORA Advent Calendar](https://adventar.org/calendars/6389)の9日目の記事です。
 
-### Applicative Functor
+## Applicative Functor
 
-FunctorはWrapperで、fmapを使えば`(a -> b)->(f a -> f b)`という風にFunctorの要素に対して関数を適用できたのだった。
+[Functor](/post/functor)はWrapperで、fmapを使えば`(a -> b)->(f a -> f b)`という風にFunctorの要素に対して関数を適用できたのだった。
 
 でもこれだと問題があって、例えば
 ```

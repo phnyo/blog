@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>The Road to Monads: Monadについて | 鯖の味噌煮がおいしく炊けない</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="" />
+    <meta property="og:title" content="The Road to Monads: Monadについて | 鯖の味噌煮がおいしく炊けない"/>
+    <meta itemprop="name" content="The Road to Monads: Monadについて | 鯖の味噌煮がおいしく炊けない" />
+    <meta name="twitter:title" content="The Road to Monads: Monadについて | 鯖の味噌煮がおいしく炊けない" />
+    <meta name="application-name" content="The Road to Monads: Monadについて | 鯖の味噌煮がおいしく炊けない" />
+
+
+    <meta name="description" content="" />
+    <meta name="twitter:description" content=""/>
+    <meta itemprop="description" content=""/>
+    <meta property="og:description" content="" />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="" />
+<meta property="og:article:published_time" content=2021-12-06T11:20:40&#43;0900 />
+<meta property="article:published_time" content=2021-12-06T11:20:40&#43;0900 />
+
+
+  <meta property="og:article:author" content="Sabanium" />
+  <meta property="article:author" content="Sabanium" />
+  <meta name="author" content="Sabanium" />
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "The Road to Monads: Monadについて",
+    "author": {
+      "@type": "Person",
+      "name": ""
+    },
+    "datePublished": "2021-12-06",
+    "description": "",
+    "wordCount":  442 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-12-06",
+    "publisher": {
+      "@type": "Organization",
+      "name": "",
+      "logo": {
+        "@type": "imageObject",
+        "url": "https:\/\/miso.sabanium.me\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    
+    <link rel="stylesheet" href="/sass/main.min.61340232c939e4e59a8a9a134c09b050b1982a1bcca9d3240138af5d40f7c4df.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/">
+                    
+                    
+                    鯖の味噌煮がおいしく炊けない
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>The Road to Monads: Monadについて</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                            By sabanium | <time>December 06, 2021</time>
+                            | 3 minutes
+                        </div>
+                        <div class="tags">
+                            
+                            <a href="/tags/haskell/">Haskell</a>
+                            
+                            <a href="/tags/%E7%BF%BB%E8%A8%B3/">翻訳</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <p>この記事は<a href="https://oliverbalfour.github.io/haskell/2020/08/08/understanding-monads-haskell.html">The Road to Monads</a>を意訳したものであり、<a href="https://adventar.org/calendars/6389">RICORA Advent Calendar</a>の11日目の記事です。</p>
+<h2 id="monad">
+    <a href="#monad" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Monad
+</h2>
+<p>今までの流れを振り返ると、<a href="/post/functor">Functor</a>は何らかの値のWrapperであり、<code>fmap</code>によってその要素に関数適用ができた。
+<a href="/post/applicative">Applicative Functor</a>はそれをさらに発展させて、関数自体をFunctorで包むことによって、複数の引数を取る関数を実装できるようにしていたのだった。</p>
+<p>さて、何が足りないのだろう？
+実は、Applicative Functorだけでは関数を複数組み合わせることが難しい。
+例えば、<code>f :: a -&gt; b</code>と<code>g :: b -&gt; c</code>があったときに、Applicative Functorだと<code>a -&gt; f b</code>、<code>b -&gt; f c</code>に写すことはできても<code>a -&gt; f c</code>に写すことができない。
+こういう関数の使い方をする機会は割と多い気がするし、こんな感じで書きたくない？という話。</p>
+<p>簡単にいえば、MonadはFunctorの中での関数合成を可能にする構造。
+しかし、これだけだとMonadが実際に何をするかいまいちわからないので以下に書いていく。
+導入として、大体FunctorみたいなものだとしてMonad<code>m</code>を使うことにしよう。</p>
+<p>じつはMonadは他の必要っぽいことも包摂してくれている。</p>
+<ol>
+<li>Monad上の関数の繰り返し適用に対して、Monadを圧縮する。<code>a -&gt; m b</code>に対してまたfmapをつかって<code>m</code>を適用すると、<code>m a -&gt; m (m -&gt; b)</code>になってしまう。
+例えば、<code>a -&gt; Maybe b</code>なら<code>Maybe a -&gt; Maybe ( Maybe b )</code>的な。
+これを圧縮して、繰り返し適用しても<code>a -&gt; Maybe b</code>の型を作れるようにする。</li>
+<li>さっきの例。
+<code>a -&gt; m b</code>と<code>b -&gt; m c</code>から<code>a -&gt; m c</code>の関数を作りだせる。</li>
+<li>逆に<code>m a</code>が与えられたとき、<code>a -&gt; m b</code>の関数を使えるようにする。</li>
+</ol>
+<h3 id="型の圧縮">
+    <a href="#%e5%9e%8b%e3%81%ae%e5%9c%a7%e7%b8%ae" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    型の圧縮
+</h3>
+<p>まあこれだけだとよくわからないので、具体例を考えよう。
+<code>1 / sqrt (x)</code>を<code>Maybe</code>を返すとして考える。
+この関数を二つの関数<code>1 / x</code>と<code>sqrt(x)</code>の合成で考えるとすると、例えば<code>1/0</code>はundefinedなので、<code>1 / x</code>で<code>x = 0</code>なら<code>Nothing</code>を返したい。
+これは<code>sqrt(x)</code>でも一緒。<code>x &lt; 0</code>なら<code>Nothing</code>を返したい。
+そこで、これらを実際に書いてみるとこんな感じ。</p>
+<pre tabindex="0"><code>safeInverse :: Double -&gt; Maybe Double
+safeInverse 0 = Nothing
+safeInverse _ = Just(1/x)
+
+safeSqrt :: Double -&gt; Maybe Double
+safeSqrt x = case signum x of
+  (-1) -&gt; Nothing
+  _ -&gt; Just (sqrt x)
+</code></pre><p>ここで<code>signum</code>は符号を返す関数。</p>
+<p>まあこれだけで完結するんだったらいいんだけど、もっとでかいプログラムの一部に組み込むなら<code>Maybe</code>の場合分けをし続けることになる。
+めんどくさい犬の散歩みたいだ。
+<code>fmap</code>をつかってもいいかもしれないけど、<code>fmap</code>を使うと<code>1 / sqrt(x)</code>の関数の型が<code>a -&gt; Maybe (Maybe b)</code>になってしまう。
+これをもっとでかい関数の一部として使うとすると&hellip;大変なことになりそうだ。</p>
+<p>それを避けるために、<code>join</code>という関数を考える。
+<code>Maybe</code>に対してはこんな感じで書ける。</p>
+<pre tabindex="0"><code>join :: Maybe (Maybe a) -&gt; Maybe a
+join (Just x) = x
+join Nothing = Nothing
+</code></pre><p>これは圧縮そのものだから、実際に<code>1 / sqrt(x)</code>を書くと</p>
+<pre tabindex="0"><code>sqrtInverse :: Double -&gt; Maybe Double
+sqrtInverse = join ( fmap safeInverse (safeSqrt x))
+</code></pre><p>こんな感じ。
+確認だけど、<code>fmap SafeInverse (safeSqrt x)</code>が<code>Double -&gt; Maybe (Maybe Double)</code>型の関数なので、<code>join</code>を使うと<code>Double -&gt; Maybe Double</code>になる。</p>
+<p>この<code>join</code>は実際にこんな感じに一般化できるらしい。</p>
+<pre tabindex="0"><code>join :: Monad m =&gt; m (m a) -&gt; m a
+</code></pre><h3 id="関数の合成">
+    <a href="#%e9%96%a2%e6%95%b0%e3%81%ae%e5%90%88%e6%88%90" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    関数の合成
+</h3>
+<p>この<code>sqrtInverse</code>を関数の合成の観点から見てみよう。
+さっきと同じように普通の値を取ってMonad内部の値を返すような関数を二つ考えて、それらを普通の値を取ってMonadの値として返す関数を想定するとき、<code>&gt;=&gt;</code>という演算子を使うことができる。
+例えば<code>f :: a -&gt; m b</code>と<code>g :: b -&gt; m c</code>があるとき、<code>f &gt;=&gt; g</code>は<code>a -&gt; m c</code>という型になる。
+この<code>&gt;=&gt;</code>演算子は魚に似ている（？）のでfish演算子と呼ばれ、この合成自体はKleisli(クライスリ)合成というらしい。</p>
+<p>実際にこのfish演算子が使われている所を見てみよう。</p>
+<pre tabindex="0"><code>(&gt;=&gt;) :: (a -&gt; Maybe b) -&gt; (b -&gt; Maybe c) -&gt; (a -&gt; Maybe c)
+f &gt;=&gt; g = \x -&gt; case f x of
+  Just x -&gt; g x
+  Nothing -&gt; Nothing
+</code></pre><p>うん。
+まず一行目はfish演算子を定義した通りの定義になっている。
+そこで、二行目以降ではMonadがMaybeなので、<code>f x</code>は<code>Just x</code>か<code>Nothing</code>を返し、<code>Just x</code>ならunwrapして<code>g x</code>を返すようにパターンマッチングしてあげている。</p>
+<p>このfish演算子を実際にさっきの<code>sqrtInverse</code>に使おう。</p>
+<pre tabindex="0"><code>sqrtInverse :: Double -&gt; Maybe Double
+sqrtInverse = safeSqrt &gt;=&gt; safeInverse
+</code></pre><p>だいぶ短くなったし、これで明示的にパターンマッチングの処理をしなくてよくなったのでだいぶ見通しが良くなるはずだ。</p>
+<p>でもこれにはまだ問題がある。
+Monadの中の値を使うときに恒等射的な関数を考える必要が出てくるのだ。
+例えば<code>m a</code>という値に対して<code>m a -&gt; a</code>という関数を作り、fish演算子を使う必要がある。
+これだとまた型に合わせるための関数を作って見通しがまた良くなくなってしまう。</p>
+<p>実際にそういう例を見てみよう。
+<code>const a b = a</code>という関数を考えれば、<code>Just 5</code>を計算するために</p>
+<pre tabindex="0"><code>(const (Just 4) &gt;=&gt; (\x -&gt; Just (x+1))) ()
+</code></pre><p>とする必要がある。
+ごちゃごちゃしててわかりにくいから型を確かめよう。
+<code>\x -&gt; Just(x + 1)</code>は<code>Int -&gt; Maybe Int</code>という型なので、fish演算子の引数を考えると<code>const (Just 4)</code>は<code>Int -&gt; Maybe Int</code>という型のはず。
+でも<code>Just 4</code>は<code>Maybe Int</code>型なので&hellip;ここはあとで見返して追記します。</p>
+<h3 id="連続的に計算させる">
+    <a href="#%e9%80%a3%e7%b6%9a%e7%9a%84%e3%81%ab%e8%a8%88%e7%ae%97%e3%81%95%e3%81%9b%e3%82%8b" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    連続的に計算させる
+</h3>
+<p>では、別の演算子<code>(&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</code>を考えよう。
+これをbind(演算子?)と呼ぶ。</p>
+<p>Maybeに対して実装するとこんな感じ。</p>
+<pre tabindex="0"><code>(&gt;&gt;=) :: Maybe a -&gt; (a -&gt; Maybe b) -&gt; Maybe b
+x (&gt;&gt;=) f = case x of
+  (Just x') -&gt; f x'
+  Nothing -&gt; Nothing
+</code></pre><p>ここで<code>x</code>は<code>Maybe x'</code>という型だとした。</p>
+<p>さっきの<code>sqrtInverse</code>をまた拾ってこよう。</p>
+<pre tabindex="0"><code>sqrtInverse :: Double -&gt; Maybe Double
+sqrtInverse x = safeSqrt x &gt;&gt;= safeInverse
+</code></pre><p>他の例としてこういうのもある。</p>
+<pre tabindex="0"><code>Just 3 &gt;&gt;= (\x -&gt; Just (x + 1)
+</code></pre><p>これはもちろん<code>Just 4</code>を返す。</p>
+<p>実際、bindはfish演算子や<code>join</code>より使いやすい。
+でも、結局bindでやっていることはfish演算子や<code>join</code>を使って遠回りしてできることと同じだ。</p>
+<p>bind、fishと<code>join</code>からお互いを作れることを示そう。</p>
+<p>思い返せば、それぞれの型はこんな感じであった。</p>
+<pre tabindex="0"><code>join :: m (m a) -&gt; m a
+(&gt;=&gt;) :: (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; (a -&gt; m c)
+(&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b
+</code></pre><p>そこで、<code>join</code>を作ってみよう。</p>
+<pre tabindex="0"><code>join x = x &gt;&gt;= id
+join x = const x &gt;=&gt; id
+</code></pre>
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/post/applicative/" title="Previous post (older)">
+            <span>Previous</span>
+            The Road to Monads: Applicativeについて
+            </a>
+        
+        
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+        </nav>
+
+        
+    </section>
+    <script defer src="/ts/features.c81551cd4dbef120af278f16966a41142c02be9ff5d6a669be09820fbf047456.js" 
+    data-enable-footnotes="true"
+    ></script>
+</footer>
+
+    </body>
+</html>

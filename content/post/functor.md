@@ -5,12 +5,13 @@ tags:
   - Haskell
   - 翻訳
 author: sabanium
+toc: true
 ---
 
-[これ](https://oliverbalfour.github.io/haskell/2020/08/04/functors-in-haskell.html)を読む。
+この記事は[The Road to Monads](https://oliverbalfour.github.io/haskell/2020/08/04/functors-in-haskell.html)を意訳したものです。
 あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので。
 
-### Functor
+## Functor
 
 Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。
 
