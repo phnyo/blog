@@ -12,6 +12,7 @@ author: sabanium
 ## Applicative Functor
 
 [Functor](/post/functor)はWrapperで、fmapを使えば`(a -> b)->(f a -> f b)`という風にFunctorの要素に対して関数を適用できたのだった。
+もちろん、これはカリー化されているので結局`(a -> b) -> f a -> f b`と同じことである。
 
 でもこれだと問題があって、例えば
 ```
@@ -29,7 +30,7 @@ class functor f => Applicative f where
   pure :: a -> f a
   (<*>) :: f (a -> b) -> f a -> f b
 ```
-ここで()に囲まれているのは演算子であることを思い出そう。
+ここで()に囲まれているのは中置関数（ここでは演算子とよぶ）であることを思い出そう。
 すると、まず`pure`はある型`a`から`Functor a`型に移すようなものだとわかる。
 `pure`はfunctorのデフォルトであるべき（らしい）なので、簡単な例だと`Maybe`に対して
 ```
@@ -89,6 +90,7 @@ fmap fn :: a -> f b
 その過程で、入力に`f a`、`f b`、`f c`、`f d`の値が必要になる。
 これって引数が多い関数じゃない？そう。
 だから再帰的なアプローチを関数に対して取ることで（！？）うまく引数の多い関数を実装できるような仕組みができているのだった。
+まあ、正直に言えばカリー化そのものなんだけど、カリー化はFunctorの中でも動かせるよねという話。
 
 ### 具体例
 
@@ -99,9 +101,10 @@ pure (+) <*> Just a <*> Just b
 == Just (+a) <*> Just b
 == Just (a+b)
 ```
-これは別に`fmap`でもいい気もする。
+ここで型を確かめておけば、`Just (+a) :: Maybe (Int -> Int)`なので、`<*> :: f (Int -> Int) -> f Int -> f Int`に対して`f Int`である`Just (a+b)`がちゃんと返ってくれる。
+これは別に`fmap`でもいい気もするがそれはさておき。
 
-こんな関数を考えると
+また、こんな関数を考えると
 ```
 quadratic :: Int -> Int -> Int -> Int -> Int
 quadratic a b c x = a * x ^ 2 + b * x + c
@@ -113,7 +116,9 @@ quadratic <$> (Just 3) <*> (Just 4) <*> (Just (-2)) <*> (Just 9)
 pure quadratic <*> (Just 3) <*> (Just 4) <*> (Just (-2)) <*> (Just 9)
 == Just(quadratic 3 4 (-2) 9)
 ```
-他に、`Applicative Maybe`についても考えることができる。
+
+さらにApplicative Functorで書いた`Maybe`、`Applicative Maybe`についても考えることができる
+（バナナのナス、バナナスみたいだ）。
 `Nothing`が片方の項にあるなら`Nothing`、それ以外は`Just`を返せばいいので
 ```
 instance Applicative Maybe where
@@ -121,13 +126,17 @@ instance Applicative Maybe where
   (Just f) <*> (Just x) = Just (f x)
   _ <*> _ = Nothing
 ```
-はい。いい感じだね。
+はい。
+定義に沿った結果が返せているのでいい感じだね。
 
 具体例についてはまたどっかで追記するかもしれない。
 
 ### 法則について
 
 守らなきゃいけない法則がある。
+これはHaskellというよりは、圏論からの要請っぽい。
+
+
 1. 恒等的な関数の存在
 ```
   pure id <*> x == x

@@ -9,11 +9,13 @@ toc: true
 ---
 
 この記事は[The Road to Monads](https://oliverbalfour.github.io/haskell/2020/08/04/functors-in-haskell.html)を意訳したものです。
-あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので。
+あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので簡単に翻訳してみた。
 
 ## Functor
+### fmap
 
 Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。
+圏論でいうところの関手。
 
 コードでの具体例：
 ```
@@ -22,9 +24,8 @@ addMaybe (Just a) (Just b) = Just (a + b)
 addMaybe _ _ = Nothing
 ```
 確かに内部の値にアクセスしている。まあこれは恣意的な関数だけど。
-でも内部の値にアクセスすることが重要で、例えばf :: Int -> Intはこういうfmapを使うことでMaybe Intにも使えるようになったりする。
-
-### fmap
+ただし、これを一般化するといい感じになってくれる。
+要は内部の値にアクセスすることが重要で、例えばf :: Int -> Intはこういう関数を使うことでMaybe Intにも使えるようになったりする。
 
 次に、こんな関数を考える。
 ```

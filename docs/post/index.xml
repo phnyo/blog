@@ -28,12 +28,11 @@
       
       <guid>https://miso.sabanium.me/post/applicative/</guid>
       <description>この記事はThe Road to Monadsを意訳したものであり、RICORA Advent Calendarの9日目の記事です。
-   Applicative Functor  FunctorはWrapperで、fmapを使えば(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。
+   Applicative Functor  FunctorはWrapperで、fmapを使えば(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。 もちろん、これはカリー化されているので結局(a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f bと同じことである。
 でもこれだと問題があって、例えば
 f :: Int -&amp;gt; Int -&amp;gt; Int f a b = a * b みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。 というか単純に一変数関数にしか使えん。 これはけっこうだるい。
 そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。 まずは関数定義から見てみよう。
-class functor f =&amp;gt; Applicative f where pure :: a -&amp;gt; f a (&amp;lt;*&amp;gt;) :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b ここで()に囲まれているのは演算子であることを思い出そう。 すると、まずpureはある型aからFunctor a型に移すようなものだとわかる。 pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して
-pure a -&amp;gt; Just a である。どこがpureなのかはいまいちよくわからない。</description>
+class functor f =&amp;gt; Applicative f where pure :: a -&amp;gt; f a (&amp;lt;*&amp;gt;) :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b ここで()に囲まれているのは中置関数（ここでは演算子とよぶ）であることを思い出そう。 すると、まずpureはある型aからFunctor a型に移すようなものだとわかる。 pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して</description>
     </item>
     
     <item>
@@ -42,11 +41,11 @@ pure a -&amp;gt; Just a である。どこがpureなのかはいまいちよく�
       <pubDate>Sat, 04 Dec 2021 22:45:30 +0900</pubDate>
       
       <guid>https://miso.sabanium.me/post/functor/</guid>
-      <description>この記事はThe Road to Monadsを意訳したものです。 あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので。
-   Functor  Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。
+      <description>この記事はThe Road to Monadsを意訳したものです。 あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので簡単に翻訳してみた。
+   Functor     fmap  Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。 圏論でいうところの関手。
 コードでの具体例：
-addMaybe :: Num a =&amp;gt; Maybe a -&amp;gt; Maybe a -&amp;gt; Maybe a addMaybe (Just a) (Just b) = Just (a + b) addMaybe _ _ = Nothing 確かに内部の値にアクセスしている。まあこれは恣意的な関数だけど。 でも内部の値にアクセスすることが重要で、例えばf :: Int -&amp;gt; Intはこういうfmapを使うことでMaybe Intにも使えるようになったりする。
-   fmap  次に、こんな関数を考える。
+addMaybe :: Num a =&amp;gt; Maybe a -&amp;gt; Maybe a -&amp;gt; Maybe a addMaybe (Just a) (Just b) = Just (a + b) addMaybe _ _ = Nothing 確かに内部の値にアクセスしている。まあこれは恣意的な関数だけど。 ただし、これを一般化するといい感じになってくれる。 要は内部の値にアクセスすることが重要で、例えばf :: Int -&amp;gt; Intはこういう関数を使うことでMaybe Intにも使えるようになったりする。
+次に、こんな関数を考える。
 fmapList :: (a -&amp;gt; b) -&amp;gt; ([a] -&amp;gt; [b]) fmapList f [] = [] fmapList f (x:xs) = f x : fmapList f xs これはmap関数と変わらない。 ある関数をリストのすべての要素に適用するだけだ。</description>
     </item>
     
