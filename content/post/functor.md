@@ -4,6 +4,7 @@ date: 2021-12-04T22:45:30+09:00
 tags:
   - Haskell
   - 翻訳
+  - Adv2021
 author: sabanium
 toc: true
 ---

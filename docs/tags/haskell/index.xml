@@ -16,7 +16,7 @@
       <description>この記事はThe Road to Monadsを意訳したものであり、RICORA Advent Calendarの11日目の記事です。
    Monad  今までの流れを振り返ると、Functorは何らかの値のWrapperであり、fmapによってその要素に関数適用ができた。 Applicative Functorはそれをさらに発展させて、関数自体をFunctorで包むことによって、複数の引数を取る関数を実装できるようにしていたのだった。
 さて、何が足りないのだろう？ 実は、Applicative Functorだけでは関数を複数組み合わせることが難しい。 例えば、f :: a -&amp;gt; bとg :: b -&amp;gt; cがあったときに、Applicative Functorだとa -&amp;gt; f b、b -&amp;gt; f cに写すことはできてもa -&amp;gt; f cに写すことができない。 こういう関数の使い方をする機会は割と多い気がするし、こんな感じで書きたくない？という話。
-簡単にいえば、MonadはFunctorの中での関数合成を可能にする構造。 しかし、これだけだとMonadが実際に何をするかいまいちわからないので以下に書いていく。 導入として、大体FunctorみたいなものだとしてMonadmを使うことにしよう。
+簡単にいえば、MonadはFunctorの中での関数合成を可能にする構造。 しかし、これだけだとMonadが実際に何をするかいまいちわからないので以下に書いていく。 導入として、大体FunctorみたいなものだとしてMonadmを使うことにしよう(とはいっても、実装上は拡張したApplicative型なんだからFunctorの拡張として捉えるほうが適切かもしれない）。
 じつはMonadは他の必要っぽいことも包摂してくれている。
  Monad上の関数の繰り返し適用に対して、Monadを圧縮する。a -&amp;gt; m bに対してまたfmapをつかってmを適用すると、m a -&amp;gt; m (m -&amp;gt; b)になってしまう。 例えば、a -&amp;gt; Maybe bならMaybe a -&amp;gt; Maybe ( Maybe b )的な。 これを圧縮して、繰り返し適用してもa -&amp;gt; Maybe bの型を作れるようにする。 さっきの例。 a -&amp;gt; m bとb -&amp;gt; m cからa -&amp;gt; m cの関数を作りだせる。 逆にm aが与えられたとき、a -&amp;gt; m bの関数を使えるようにする。     型の圧縮  まあこれだけだとよくわからないので、具体例を考えよう。 1 / sqrt (x)をMaybeを返すとして考える。 この関数を二つの関数1 / xとsqrt(x)の合成で考えるとすると、例えば1/0はundefinedなので、1 / xでx = 0ならNothingを返したい。 これはsqrt(x)でも一緒。x &amp;lt; 0ならNothingを返したい。 そこで、これらを実際に書いてみるとこんな感じ。</description>
     </item>

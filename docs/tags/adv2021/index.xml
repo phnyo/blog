@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on 鯖の味噌煮がおいしく炊けない</title>
-    <link>https://miso.sabanium.me/post/</link>
-    <description>Recent content in Posts on 鯖の味噌煮がおいしく炊けない</description>
+    <title>Adv2021 on 鯖の味噌煮がおいしく炊けない</title>
+    <link>https://miso.sabanium.me/tags/adv2021/</link>
+    <description>Recent content in Adv2021 on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Tue, 21 Dec 2021 00:16:14 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 21 Dec 2021 00:16:14 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/adv2021/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>i3wmをubuntuで導入し、いい感じにする</title>
       <link>https://miso.sabanium.me/post/i3/</link>
@@ -44,20 +44,6 @@ i3を使う際にはmodと呼ばれる特殊キーを設定する必要があり
     </item>
     
     <item>
-      <title>The Road to Monads: Applicativeについて</title>
-      <link>https://miso.sabanium.me/post/applicative/</link>
-      <pubDate>Sun, 05 Dec 2021 11:22:10 +0900</pubDate>
-      
-      <guid>https://miso.sabanium.me/post/applicative/</guid>
-      <description>この記事はThe Road to Monadsを意訳したものであり、RICORA Advent Calendarの9日目の記事です。
-   Applicative Functor  FunctorはWrapperで、fmapを使えば(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。 もちろん、これはカリー化されているので結局(a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f bと同じことである。
-でもこれだと問題があって、例えば
-f :: Int -&amp;gt; Int -&amp;gt; Int f a b = a * b みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。 というか単純に一変数関数にしか使えん。 これはけっこうだるい。
-そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。 まずは関数定義から見てみよう。
-class functor f =&amp;gt; Applicative f where pure :: a -&amp;gt; f a (&amp;lt;*&amp;gt;) :: f (a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f b ここで()に囲まれているのは中置関数（ここでは演算子とよぶ）であることを思い出そう。 すると、まずpureはある型aからFunctor a型に移すようなものだとわかる。 pureはfunctorのデフォルトであるべき（らしい）なので、簡単な例だとMaybeに対して</description>
-    </item>
-    
-    <item>
       <title>The Road to Monads: Functorについて</title>
       <link>https://miso.sabanium.me/post/functor/</link>
       <pubDate>Sat, 04 Dec 2021 22:45:30 +0900</pubDate>
@@ -69,30 +55,6 @@ class functor f =&amp;gt; Applicative f where pure :: a -&amp;gt; f a (&amp;lt;*
 addMaybe :: Num a =&amp;gt; Maybe a -&amp;gt; Maybe a -&amp;gt; Maybe a addMaybe (Just a) (Just b) = Just (a + b) addMaybe _ _ = Nothing 確かに内部の値にアクセスしている。まあこれは恣意的な関数だけど。 ただし、これを一般化するといい感じになってくれる。 要は内部の値にアクセスすることが重要で、例えばf :: Int -&amp;gt; Intはこういう関数を使うことでMaybe Intにも使えるようになったりする。
 次に、こんな関数を考える。
 fmapList :: (a -&amp;gt; b) -&amp;gt; ([a] -&amp;gt; [b]) fmapList f [] = [] fmapList f (x:xs) = f x : fmapList f xs これはmap関数と変わらない。 ある関数をリストのすべての要素に適用するだけだ。</description>
-    </item>
-    
-    <item>
-      <title>Haskell覚え書き</title>
-      <link>https://miso.sabanium.me/post/c-haskell1/</link>
-      <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://miso.sabanium.me/post/c-haskell1/</guid>
-      <description>構文解析のためのモナド等についてまとめる。完全に自分用。
-   Haskellの文法について  よく見るやつ
- 型拘束  (Ord a) =&amp;gt; a -&amp;gt; a  要素の存在  (x:xs) </description>
-    </item>
-    
-    <item>
-      <title>HaskellでCコンパイラもどきを作る #0</title>
-      <link>https://miso.sabanium.me/post/c-haskell0/</link>
-      <pubDate>Fri, 03 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://miso.sabanium.me/post/c-haskell0/</guid>
-      <description>まず環境構築をする。
-   Haskellのインストール  これを読んで、GHCupとHaskell Tool Stackの一番上の方にのってるcurlコマンドを叩く。
-curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh curl -sSL https://get.haskellstack.org/ | sh LSPは必要なので入れて、それ以外のものにも大体Yesと回答した気がする。なんかPとか押させるのが厄介。
-   Haskell Language Serverの導入  vim-lsp-settingsはHaskell Language Server(以下HLS)に対応していないがvim-lsp-settingsのissueを読むとそういうことが書いてあるので.vimrcを適当にいじるとうまくHLSが動く。
-これでGHC+HLSが入った環境が準備できた。</description>
     </item>
     
   </channel>

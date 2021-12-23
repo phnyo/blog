@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>memo on 鯖の味噌煮がおいしく炊けない</title>
+    <link>https://miso.sabanium.me/tags/memo/</link>
+    <description>Recent content in memo on 鯖の味噌煮がおいしく炊けない</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <lastBuildDate>Tue, 21 Dec 2021 00:16:14 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/memo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>i3wmをubuntuで導入し、いい感じにする</title>
+      <link>https://miso.sabanium.me/post/i3/</link>
+      <pubDate>Tue, 21 Dec 2021 00:16:14 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/i3/</guid>
+      <description>これはRICORA言語班 Advent Calendarの18日目の記事です。新入生相手におままごとをしていたら完全に書くのを忘れていたので、適当なことを書きます。すみません。
+   背景  windows10をサクサク動かせないPCを普段使いするためにはどうすればいいのだろうか？という問題が与えられたとき、大体ubuntuとかlinux mintみたいな軽量ディストロがおすすめされると思うのですが、あえてウィンドウマネージャーの方から攻めてみたいと思ったので書きます。
+   導入とか  dotfileとかどうせ上げてるんだろ？ → はい。これです。見たければ見てもいいよ。
+i3はフリーソースのタイル型ウィンドウマネージャです。 タイル型ウィンドウマネージャは、画面上のアプリケーションを画面を埋めるように配置します。
+個人的に感じるi3のメリットは、カーソルを動かす必要がない（＝キーボード上で操作が完結する）ことと、バッテリーの持ちが非常に良くなることです。 もちろんacpiで充電の上限は設けていますが、大体70%充電しておけば６時間程度は使えるはずです。 さらに、fehなどを用いることで背景を設定することもでき、i3barやi3statusを調整することで、天気やバッテリー情報などを常時表示することもできます。
+   導入方法  i3は文献があまりになさすぎるので、いつものarch wikiに全面的に頼ることになります。 私も全面的に頼りました。
+archで入れているわけではないので、ubuntuを使いつつ入れる方法を説明します。
+公式でおすすめされているのは、配布されているtarballを用いる方法ですが、aptでも拾ってこれます。
+sudo apt install i3 i3-wm このくらいで十分だった気がする。 足りなくなったら都度足してください。
+i3をインストールすると、ログイン画面の右下に歯車マークが出て、ログイン後のウィンドウマネージャが選べるようになります。 これでi3を選択してログインすれば、無事にインストール完了です。
+   操作  i3はまあまあ独特な動きをします（vimよりは習得コストが低いかもしれない）。 キーマップの完全版はDefault Keybindingsを参照してください。
+i3を使う際にはmodと呼ばれる特殊キーを設定する必要があります。 私はaltキーに設定して使っていますが、このmodキーと何らかのキーを同時に押すことで画面の操作を行います。
+例えば、mod + 1なら1番目のウィンドウに移動します。 また、mod + shift + 1なら現在のウィンドウを1番目のウィンドウに移動させます。 意味がわかりませんね。手を動かさないと理解できないので自分で頑張ってi3を使ってみてください。
+   i3  i3の設定ファイルは、ルート直下の.config/i3/configになります。 デフォルトでは生成されていなかったと思うので、そのようなファイルを新しく作って設定してあげると勝手にファイルを見に行ってくれます。 確か開発レポジトリをクローンしてきてブランチをcheckoutするとデフォの設定が入っているconfigがあるはずです。 おそらく初見で利用する際にはそれをコピー・コピーアンドペーストするといいと思います。</description>
+    </item>
+    
+  </channel>
+</rss>

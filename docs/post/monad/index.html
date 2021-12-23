@@ -49,7 +49,7 @@
     },
     "datePublished": "2021-12-06",
     "description": "",
-    "wordCount":  442 ,
+    "wordCount":  480 ,
     "mainEntityOfPage": "True",
     "dateModified": "2021-12-06",
     "publisher": {
@@ -128,6 +128,8 @@
                             
                             <a href="/tags/%E7%BF%BB%E8%A8%B3/">翻訳</a>
                             
+                            <a href="/tags/adv2021/">Adv2021</a>
+                            
                         </div>
                     </div>
                 </div>
@@ -155,7 +157,7 @@
 こういう関数の使い方をする機会は割と多い気がするし、こんな感じで書きたくない？という話。</p>
 <p>簡単にいえば、MonadはFunctorの中での関数合成を可能にする構造。
 しかし、これだけだとMonadが実際に何をするかいまいちわからないので以下に書いていく。
-導入として、大体FunctorみたいなものだとしてMonad<code>m</code>を使うことにしよう。</p>
+導入として、大体FunctorみたいなものだとしてMonad<code>m</code>を使うことにしよう(とはいっても、実装上は拡張したApplicative型なんだからFunctorの拡張として捉えるほうが適切かもしれない）。</p>
 <p>じつはMonadは他の必要っぽいことも包摂してくれている。</p>
 <ol>
 <li>Monad上の関数の繰り返し適用に対して、Monadを圧縮する。<code>a -&gt; m b</code>に対してまたfmapをつかって<code>m</code>を適用すると、<code>m a -&gt; m (m -&gt; b)</code>になってしまう。
@@ -238,10 +240,13 @@ Monadの中の値を使うときに恒等射的な関数を考える必要が出
 <p>実際にそういう例を見てみよう。
 <code>const a b = a</code>という関数を考えれば、<code>Just 5</code>を計算するために</p>
 <pre tabindex="0"><code>(const (Just 4) &gt;=&gt; (\x -&gt; Just (x+1))) ()
-</code></pre><p>とする必要がある。
-ごちゃごちゃしててわかりにくいから型を確かめよう。
-<code>\x -&gt; Just(x + 1)</code>は<code>Int -&gt; Maybe Int</code>という型なので、fish演算子の引数を考えると<code>const (Just 4)</code>は<code>Int -&gt; Maybe Int</code>という型のはず。
-でも<code>Just 4</code>は<code>Maybe Int</code>型なので&hellip;ここはあとで見返して追記します。</p>
+</code></pre><p>とする必要がある。</p>
+<p>ごちゃごちゃしててわかりにくいから型を確かめよう。
+<code>\x -&gt; Just(x + 1)</code>は<code>Int -&gt; Maybe Int</code>という型で、<code>const Just 4</code>は<code>Num a =&gt; a -&gt; Maybe b</code>という型だ。
+あれ、<code>const</code>って引数2つ取るんじゃないの?と思うんだけど、それはカリー化されたものを見ているだけで、実際には1変数だけ取ることもできる（もちろん、<code>const a</code>は<code>const a b</code>とは違う関数）。</p>
+<p>それで<code>&gt;=&gt;</code>が使えるが、型チェックをすると<code>(const Just 4 &gt;=&gt; (\x -&gt; x + 1)) :: Num c =&gt; b -&gt; Maybe c</code>なので、もう一つなにかの引数が必要っぽいことがわかるので、入れてあげると<code>Just 5</code>が出る。
+これはなんでもいい。
+例えば<code>'c'</code>でも<code>()</code>でもいい。</p>
 <h3 id="連続的に計算させる">
     <a href="#%e9%80%a3%e7%b6%9a%e7%9a%84%e3%81%ab%e8%a8%88%e7%ae%97%e3%81%95%e3%81%9b%e3%82%8b" class="anchor">
         <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -264,19 +269,22 @@ x (&gt;&gt;=) f = case x of
 <pre tabindex="0"><code>sqrtInverse :: Double -&gt; Maybe Double
 sqrtInverse x = safeSqrt x &gt;&gt;= safeInverse
 </code></pre><p>他の例としてこういうのもある。</p>
-<pre tabindex="0"><code>Just 3 &gt;&gt;= (\x -&gt; Just (x + 1)
+<pre tabindex="0"><code>Just 3 &gt;&gt;= (\x -&gt; Just (x + 1))
 </code></pre><p>これはもちろん<code>Just 4</code>を返す。</p>
 <p>実際、bindはfish演算子や<code>join</code>より使いやすい。
 でも、結局bindでやっていることはfish演算子や<code>join</code>を使って遠回りしてできることと同じだ。</p>
-<p>bind、fishと<code>join</code>からお互いを作れることを示そう。</p>
+<p>bind、fishと<code>join</code>からお互いを作れることを示そう。
+ここで<code>const</code>と<code>id</code>という関数を使っているが、それぞれ<code>const a b = a</code>と<code>id a = a</code>と定義される関数である。</p>
 <p>思い返せば、それぞれの型はこんな感じであった。</p>
 <pre tabindex="0"><code>join :: m (m a) -&gt; m a
 (&gt;=&gt;) :: (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; (a -&gt; m c)
 (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b
-</code></pre><p>そこで、<code>join</code>を作ってみよう。</p>
+</code></pre><p>そこで、まず<code>join</code>を作ってみよう。</p>
 <pre tabindex="0"><code>join x = x &gt;&gt;= id
 join x = const x &gt;=&gt; id
-</code></pre>
+</code></pre><p>上は<code>m (m a)</code>型の変数を取っている。
+<code>id</code>は<code>a -&gt; a</code>の関数なので、</p>
+
     </div>
 </div>
 
@@ -290,6 +298,11 @@ join x = const x &gt;=&gt; id
             </a>
         
         
+        
+        <a rel="next" href="/post/i3/" title="Next post (newer)">
+            <span>Next</span>
+            i3wmをubuntuで導入し、いい感じにする
+            </a> 
         
     </nav>
     

@@ -5,7 +5,214 @@
     <description>Recent content on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 06 Dec 2021 11:20:40 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 21 Dec 2021 00:16:14 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+    <title>i3wmをubuntuで導入し、いい感じにする</title>
+    <link>https://miso.sabanium.me/post/i3/</link>
+    <pubDate>Tue, 21 Dec 2021 00:16:14 +0900</pubDate>
+    <author>sabanium</author>
+    <guid>https://miso.sabanium.me/post/i3/</guid>
+    <description>
+        &lt;p&gt;これは&lt;a href=&#34;https://adventar.org/6389&#34;&gt;RICORA言語班 Advent Calendar&lt;/a&gt;の18日目の記事です。新入生相手におままごとをしていたら完全に書くのを忘れていたので、適当なことを書きます。すみません。&lt;/p&gt;
+&lt;h3 id=&#34;背景&#34;&gt;
+    &lt;a href=&#34;#%e8%83%8c%e6%99%af&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    背景
+&lt;/h3&gt;
+&lt;p&gt;windows10をサクサク動かせないPCを普段使いするためにはどうすればいいのだろうか？という問題が与えられたとき、大体ubuntuとかlinux mintみたいな軽量ディストロがおすすめされると思うのですが、あえてウィンドウマネージャーの方から攻めてみたいと思ったので書きます。&lt;/p&gt;
+&lt;h3 id=&#34;導入とか&#34;&gt;
+    &lt;a href=&#34;#%e5%b0%8e%e5%85%a5%e3%81%a8%e3%81%8b&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    導入とか
+&lt;/h3&gt;
+&lt;p&gt;dotfileとかどうせ上げてるんだろ？ → はい。&lt;a href=&#34;https://github.com/phnyo/dotfiles&#34;&gt;これ&lt;/a&gt;です。見たければ見てもいいよ。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://i3wm.org&#34;&gt;i3&lt;/a&gt;はフリーソースのタイル型ウィンドウマネージャです。
+タイル型ウィンドウマネージャは、画面上のアプリケーションを画面を埋めるように配置します。&lt;/p&gt;
+&lt;p&gt;個人的に感じるi3のメリットは、カーソルを動かす必要がない（＝キーボード上で操作が完結する）ことと、バッテリーの持ちが非常に良くなることです。
+もちろん&lt;code&gt;acpi&lt;/code&gt;で充電の上限は設けていますが、大体70%充電しておけば６時間程度は使えるはずです。
+さらに、&lt;code&gt;feh&lt;/code&gt;などを用いることで背景を設定することもでき、&lt;code&gt;i3bar&lt;/code&gt;や&lt;code&gt;i3status&lt;/code&gt;を調整することで、天気やバッテリー情報などを常時表示することもできます。&lt;/p&gt;
+&lt;h4 id=&#34;導入方法&#34;&gt;
+    &lt;a href=&#34;#%e5%b0%8e%e5%85%a5%e6%96%b9%e6%b3%95&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    導入方法
+&lt;/h4&gt;
+&lt;p&gt;i3は文献があまりになさすぎるので、いつもの&lt;a href=&#34;https://wiki.archlinux.jp/index.php/I3&#34;&gt;arch wiki&lt;/a&gt;に全面的に頼ることになります。
+私も全面的に頼りました。&lt;/p&gt;
+&lt;p&gt;archで入れているわけではないので、ubuntuを使いつつ入れる方法を説明します。&lt;/p&gt;
+&lt;p&gt;公式でおすすめされているのは、配布されているtarballを用いる方法ですが、&lt;code&gt;apt&lt;/code&gt;でも拾ってこれます。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt install i3 i3-wm
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;このくらいで十分だった気がする。
+足りなくなったら都度足してください。&lt;/p&gt;
+&lt;p&gt;i3をインストールすると、ログイン画面の右下に歯車マークが出て、ログイン後のウィンドウマネージャが選べるようになります。
+これでi3を選択してログインすれば、無事にインストール完了です。&lt;/p&gt;
+&lt;h3 id=&#34;操作&#34;&gt;
+    &lt;a href=&#34;#%e6%93%8d%e4%bd%9c&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    操作
+&lt;/h3&gt;
+&lt;p&gt;i3はまあまあ独特な動きをします（vimよりは習得コストが低いかもしれない）。
+キーマップの完全版は&lt;a href=&#34;https://i3wm.org/docs/userguide.html#_default_keybindings&#34;&gt;Default Keybindings&lt;/a&gt;を参照してください。&lt;/p&gt;
+&lt;p&gt;i3を使う際には&lt;code&gt;mod&lt;/code&gt;と呼ばれる特殊キーを設定する必要があります。
+私はaltキーに設定して使っていますが、この&lt;code&gt;mod&lt;/code&gt;キーと何らかのキーを同時に押すことで画面の操作を行います。&lt;/p&gt;
+&lt;p&gt;例えば、&lt;code&gt;mod + 1&lt;/code&gt;なら1番目のウィンドウに移動します。
+また、&lt;code&gt;mod + shift + 1&lt;/code&gt;なら現在のウィンドウを1番目のウィンドウに移動させます。
+意味がわかりませんね。手を動かさないと理解できないので自分で頑張ってi3を使ってみてください。&lt;/p&gt;
+&lt;h3 id=&#34;i3&#34;&gt;
+    &lt;a href=&#34;#i3&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    i3
+&lt;/h3&gt;
+&lt;p&gt;i3の設定ファイルは、ルート直下の&lt;code&gt;.config/i3/config&lt;/code&gt;になります。
+デフォルトでは生成されていなかったと思うので、そのようなファイルを新しく作って設定してあげると勝手にファイルを見に行ってくれます。
+確か開発レポジトリをクローンしてきてブランチをcheckoutするとデフォの設定が入っているconfigがあるはずです。
+おそらく初見で利用する際にはそれをコピー・コピーアンドペーストするといいと思います。&lt;/p&gt;
+&lt;p&gt;私が追記している設定は確かこんな感じです。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;画面閉じたらスリープさせる(だった気がする)
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+日本語入力用のibusを裏で起動
+exec --no-startup-id ibus-daemon -x -d -r
+
+背景の起動
+exec --no-startup-id ~/.fehbg
+
+明るさ
+exec --no-startup-id compton -cbm 0.6
+
+通知マネージャのDunstをきちんと動かしたかった...
+exec --no-startup-id dunst -print -config &amp;quot;/home/n/.config/dunst/dunstrc&amp;quot;
+
+音量の上げ下げ
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% &amp;amp;&amp;amp; $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% &amp;amp;&amp;amp; $refresh_i3status
+
+ミュート
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle &amp;amp;&amp;amp; $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle &amp;amp;&amp;amp; $refresh_i3status
+
+音量調整
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;音量調整はだるいというかリファレンスがなくてstack overflowとかに頼りまくりですが多分これで動くはず。&lt;/p&gt;
+&lt;h3 id=&#34;i3bar&#34;&gt;
+    &lt;a href=&#34;#i3bar&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    i3bar
+&lt;/h3&gt;
+&lt;p&gt;大抵のOSは（勝手、あるいは不親切もしくは手を回しすぎているので）上か下に何らかの情報を表示するバーみたいなのがあります。
+i3のバーはデフォルトではクソダサなのでどうにかこうにか整えていきましょう。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;(username)/.config/i3/config&lt;/code&gt;の一番下にバーという項目があります。
+&lt;a href=&#34;https://i3wm.org/docs/userguide.html#_configuring_i3bar&#34;&gt;いろんな設定ができる&lt;/a&gt;ので、適当に参照して動かしてください。
+この設定の中で割と参照される設定は&lt;code&gt;font&lt;/code&gt;、&lt;code&gt;colors&lt;/code&gt;、&lt;code&gt;position&lt;/code&gt;とかだと思います。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;font&lt;/code&gt;はまあフォントなんですが、実は記号っぽい（例：バッテリーとか）を付け加えるフォントが存在し、それを利用するとメモリマークなどを表示させることができます。詳しくは&lt;code&gt;Awesome Font&lt;/code&gt;で調べてみてください。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;colors&lt;/code&gt;は色ですが、RGB16進表示で色変できます。よかったですね。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;position&lt;/code&gt;は確かtopとbottomしかないのですが、位置は変えられます。よかったですね２。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;いや肝心の表示するものは！？という話ですが、この設定は&lt;code&gt;(username)/.config/i3status/config&lt;/code&gt;で行います。
+このファイルもデフォルトでは存在しないので、作ってくださいね。&lt;/p&gt;
+&lt;p&gt;i3statusの設定によってバーに表示されるものの指定を行うことができます。
+私のstatusにはこんな感じのものが表示されているらしいです。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;order += &amp;quot;read_file spotify&amp;quot;
+order += &amp;quot;read_file weather&amp;quot;
+order += &amp;quot;cpu_usage&amp;quot;
+order += &amp;quot;memory&amp;quot;
+order += &amp;quot;battery all&amp;quot;
+order += &amp;quot;tztime local&amp;quot;
+order += &amp;quot;wireless _first_&amp;quot;
+order += &amp;quot;volume master&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;read_file&lt;/code&gt;以外はそれぞれの機器の現在の状況を読み取って表示してくれます。あとは&lt;a href=&#34;https://i3wm.org/docs/i3status.html&#34;&gt;詳細&lt;/a&gt;を読んでね。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;read_file&lt;/code&gt;はファイルを読んで表示してくれる感じのやつです。
+上のspotify、weatherはそれぞれspotifyと&lt;a href=&#34;wttr.in&#34;&gt;wttr.in&lt;/a&gt;から情報を拾ってきて表示するスクリプ卜のログを読んでいます。wttr.inはたまに止まってバグってわろてる。&lt;/p&gt;
+&lt;p&gt;まあこんな感じでカスタマイズできます。&lt;/p&gt;
+&lt;h3 id=&#34;スクリプトについて&#34;&gt;
+    &lt;a href=&#34;#%e3%82%b9%e3%82%af%e3%83%aa%e3%83%97%e3%83%88%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    スクリプトについて
+&lt;/h3&gt;
+&lt;p&gt;スクリプトっていってもどういうスクリプトやねん。
+はい。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#/usr/bin/bash
+
+WEATHER_LOG=&amp;quot;/home/$(whoami)/.cache/weather/weather.log&amp;quot;
+
+echo &amp;quot;Tsukuba &amp;quot; &amp;gt; $WEATHER_LOG
+curl wttr.in/Tsukuba?format=1 | tr -d &#39;\n &#39; &amp;gt;&amp;gt; $WEATHER_LOG 
+echo &amp;quot; / Unga &amp;quot; &amp;gt;&amp;gt; $WEATHER_LOG
+curl wttr.in/Unga.Station?format=1 | tr -d &#39;\n &#39; &amp;gt;&amp;gt; $WEATHER_LOG
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;こんなん。大学が運河にあり、家がつくばにあるので&lt;code&gt;curl&lt;/code&gt;してそれを表示しています。
+&lt;code&gt;cron&lt;/code&gt;で15分ごとに更新される手筈だが、wttr.inの天気の更新が遅いのでもはや参考情報にしかならないので観葉植物みたいなもん。spotifyのも同じ感じで、これもspofityを動かしてないといけないので観葉植物もどき。&lt;/p&gt;
+&lt;p&gt;あとディスプレイの照度調整をするスクリプトを書かないと照度調整ができなかった（カス！）ので、それも書いた。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;CURRENT_VAL=$(cat /sys/class/backlight/intel_backlight/actual_brightness)
+MAX_VAL=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+
+if [ $1 = &#39;-&#39; ]; then
+  echo $(expr $CURRENT_VAL - $(expr $MAX_VAL / 20)) &amp;gt; /sys/class/backlight/intel_backlight/brightness
+elif [ $1 = &#39;+&#39; ]; then
+  echo $(expr $CURRENT_VAL + $(expr $MAX_VAL / 20)) &amp;gt; /sys/class/backlight/intel_backlight/brightness
+fi
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;/sys/class/backlight/intel_backlight/brightness&lt;/code&gt;を読み書きすることで明るさ調整をしているらしいので、入力によってプラスしたりマイナスしたりした値を返すようにしています。なぜこれが組み込まれていないか謎。&lt;/p&gt;
+&lt;h3 id=&#34;ファイル管理について&#34;&gt;
+    &lt;a href=&#34;#%e3%83%95%e3%82%a1%e3%82%a4%e3%83%ab%e7%ae%a1%e7%90%86%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    ファイル管理について
+&lt;/h3&gt;
+&lt;p&gt;dotfileというレポを作って、&lt;code&gt;init.sh&lt;/code&gt;で初期設定を勝手にできるようにしています。というか.vimrcと.bashrcもあるので、それはrootにおいて、それ以外は.configを作成してそれに突っ込んでる。ubuntuでしか動かんが、ワシはそれでいいのでそれでいい。&lt;/p&gt;
+&lt;h3 id=&#34;結論&#34;&gt;
+    &lt;a href=&#34;#%e7%b5%90%e8%ab%96&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    結論
+&lt;/h3&gt;
+&lt;p&gt;i3を使いたい気持ちになりましたか？早くwindowsかOS Xをディスクから完全に消し去り、i3と心中しましょう。おわり。&lt;/p&gt;
+
+    </description>
+    </item>
+    
     <item>
     <title>The Road to Monads: Monadについて</title>
     <link>https://miso.sabanium.me/post/monad/</link>
@@ -32,7 +239,7 @@
 こういう関数の使い方をする機会は割と多い気がするし、こんな感じで書きたくない？という話。&lt;/p&gt;
 &lt;p&gt;簡単にいえば、MonadはFunctorの中での関数合成を可能にする構造。
 しかし、これだけだとMonadが実際に何をするかいまいちわからないので以下に書いていく。
-導入として、大体FunctorみたいなものだとしてMonad&lt;code&gt;m&lt;/code&gt;を使うことにしよう。&lt;/p&gt;
+導入として、大体FunctorみたいなものだとしてMonad&lt;code&gt;m&lt;/code&gt;を使うことにしよう(とはいっても、実装上は拡張したApplicative型なんだからFunctorの拡張として捉えるほうが適切かもしれない）。&lt;/p&gt;
 &lt;p&gt;じつはMonadは他の必要っぽいことも包摂してくれている。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Monad上の関数の繰り返し適用に対して、Monadを圧縮する。&lt;code&gt;a -&amp;gt; m b&lt;/code&gt;に対してまたfmapをつかって&lt;code&gt;m&lt;/code&gt;を適用すると、&lt;code&gt;m a -&amp;gt; m (m -&amp;gt; b)&lt;/code&gt;になってしまう。
@@ -115,10 +322,13 @@ Monadの中の値を使うときに恒等射的な関数を考える必要が出
 &lt;p&gt;実際にそういう例を見てみよう。
 &lt;code&gt;const a b = a&lt;/code&gt;という関数を考えれば、&lt;code&gt;Just 5&lt;/code&gt;を計算するために&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(const (Just 4) &amp;gt;=&amp;gt; (\x -&amp;gt; Just (x+1))) ()
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;とする必要がある。
-ごちゃごちゃしててわかりにくいから型を確かめよう。
-&lt;code&gt;\x -&amp;gt; Just(x + 1)&lt;/code&gt;は&lt;code&gt;Int -&amp;gt; Maybe Int&lt;/code&gt;という型なので、fish演算子の引数を考えると&lt;code&gt;const (Just 4)&lt;/code&gt;は&lt;code&gt;Int -&amp;gt; Maybe Int&lt;/code&gt;という型のはず。
-でも&lt;code&gt;Just 4&lt;/code&gt;は&lt;code&gt;Maybe Int&lt;/code&gt;型なので&amp;hellip;ここはあとで見返して追記します。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;とする必要がある。&lt;/p&gt;
+&lt;p&gt;ごちゃごちゃしててわかりにくいから型を確かめよう。
+&lt;code&gt;\x -&amp;gt; Just(x + 1)&lt;/code&gt;は&lt;code&gt;Int -&amp;gt; Maybe Int&lt;/code&gt;という型で、&lt;code&gt;const Just 4&lt;/code&gt;は&lt;code&gt;Num a =&amp;gt; a -&amp;gt; Maybe b&lt;/code&gt;という型だ。
+あれ、&lt;code&gt;const&lt;/code&gt;って引数2つ取るんじゃないの?と思うんだけど、それはカリー化されたものを見ているだけで、実際には1変数だけ取ることもできる（もちろん、&lt;code&gt;const a&lt;/code&gt;は&lt;code&gt;const a b&lt;/code&gt;とは違う関数）。&lt;/p&gt;
+&lt;p&gt;それで&lt;code&gt;&amp;gt;=&amp;gt;&lt;/code&gt;が使えるが、型チェックをすると&lt;code&gt;(const Just 4 &amp;gt;=&amp;gt; (\x -&amp;gt; x + 1)) :: Num c =&amp;gt; b -&amp;gt; Maybe c&lt;/code&gt;なので、もう一つなにかの引数が必要っぽいことがわかるので、入れてあげると&lt;code&gt;Just 5&lt;/code&gt;が出る。
+これはなんでもいい。
+例えば&lt;code&gt;&#39;c&#39;&lt;/code&gt;でも&lt;code&gt;()&lt;/code&gt;でもいい。&lt;/p&gt;
 &lt;h3 id=&#34;連続的に計算させる&#34;&gt;
     &lt;a href=&#34;#%e9%80%a3%e7%b6%9a%e7%9a%84%e3%81%ab%e8%a8%88%e7%ae%97%e3%81%95%e3%81%9b%e3%82%8b&#34; class=&#34;anchor&#34;&gt;
         &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
@@ -141,19 +351,22 @@ x (&amp;gt;&amp;gt;=) f = case x of
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sqrtInverse :: Double -&amp;gt; Maybe Double
 sqrtInverse x = safeSqrt x &amp;gt;&amp;gt;= safeInverse
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;他の例としてこういうのもある。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Just 3 &amp;gt;&amp;gt;= (\x -&amp;gt; Just (x + 1)
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Just 3 &amp;gt;&amp;gt;= (\x -&amp;gt; Just (x + 1))
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;これはもちろん&lt;code&gt;Just 4&lt;/code&gt;を返す。&lt;/p&gt;
 &lt;p&gt;実際、bindはfish演算子や&lt;code&gt;join&lt;/code&gt;より使いやすい。
 でも、結局bindでやっていることはfish演算子や&lt;code&gt;join&lt;/code&gt;を使って遠回りしてできることと同じだ。&lt;/p&gt;
-&lt;p&gt;bind、fishと&lt;code&gt;join&lt;/code&gt;からお互いを作れることを示そう。&lt;/p&gt;
+&lt;p&gt;bind、fishと&lt;code&gt;join&lt;/code&gt;からお互いを作れることを示そう。
+ここで&lt;code&gt;const&lt;/code&gt;と&lt;code&gt;id&lt;/code&gt;という関数を使っているが、それぞれ&lt;code&gt;const a b = a&lt;/code&gt;と&lt;code&gt;id a = a&lt;/code&gt;と定義される関数である。&lt;/p&gt;
 &lt;p&gt;思い返せば、それぞれの型はこんな感じであった。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;join :: m (m a) -&amp;gt; m a
 (&amp;gt;=&amp;gt;) :: (a -&amp;gt; m b) -&amp;gt; (b -&amp;gt; m c) -&amp;gt; (a -&amp;gt; m c)
 (&amp;gt;&amp;gt;=) :: m a -&amp;gt; (a -&amp;gt; m b) -&amp;gt; m b
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;そこで、&lt;code&gt;join&lt;/code&gt;を作ってみよう。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;そこで、まず&lt;code&gt;join&lt;/code&gt;を作ってみよう。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;join x = x &amp;gt;&amp;gt;= id
 join x = const x &amp;gt;=&amp;gt; id
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上は&lt;code&gt;m (m a)&lt;/code&gt;型の変数を取っている。
+&lt;code&gt;id&lt;/code&gt;は&lt;code&gt;a -&amp;gt; a&lt;/code&gt;の関数なので、&lt;/p&gt;
+
     </description>
     </item>
     

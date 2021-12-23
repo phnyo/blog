@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>i3wmをubuntuで導入し、いい感じにする | 鯖の味噌煮がおいしく炊けない</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="" />
+    <meta property="og:title" content="i3wmをubuntuで導入し、いい感じにする | 鯖の味噌煮がおいしく炊けない"/>
+    <meta itemprop="name" content="i3wmをubuntuで導入し、いい感じにする | 鯖の味噌煮がおいしく炊けない" />
+    <meta name="twitter:title" content="i3wmをubuntuで導入し、いい感じにする | 鯖の味噌煮がおいしく炊けない" />
+    <meta name="application-name" content="i3wmをubuntuで導入し、いい感じにする | 鯖の味噌煮がおいしく炊けない" />
+
+
+    <meta name="description" content="" />
+    <meta name="twitter:description" content=""/>
+    <meta itemprop="description" content=""/>
+    <meta property="og:description" content="" />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="" />
+<meta property="og:article:published_time" content=2021-12-21T00:16:14&#43;0900 />
+<meta property="article:published_time" content=2021-12-21T00:16:14&#43;0900 />
+
+
+  <meta property="og:article:author" content="Sabanium" />
+  <meta property="article:author" content="Sabanium" />
+  <meta name="author" content="Sabanium" />
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "i3wmをubuntuで導入し、いい感じにする",
+    "author": {
+      "@type": "Person",
+      "name": ""
+    },
+    "datePublished": "2021-12-21",
+    "description": "",
+    "wordCount":  273 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-12-21",
+    "publisher": {
+      "@type": "Organization",
+      "name": "",
+      "logo": {
+        "@type": "imageObject",
+        "url": "https:\/\/miso.sabanium.me\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    
+    <link rel="stylesheet" href="/sass/main.min.61340232c939e4e59a8a9a134c09b050b1982a1bcca9d3240138af5d40f7c4df.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/">
+                    
+                    
+                    鯖の味噌煮がおいしく炊けない
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>i3wmをubuntuで導入し、いい感じにする</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                            By sabanium | <time>December 21, 2021</time>
+                            | 2 minutes
+                        </div>
+                        <div class="tags">
+                            
+                            <a href="/tags/memo/">memo</a>
+                            
+                            <a href="/tags/adv2021/">Adv2021</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <p>これは<a href="https://adventar.org/6389">RICORA言語班 Advent Calendar</a>の18日目の記事です。新入生相手におままごとをしていたら完全に書くのを忘れていたので、適当なことを書きます。すみません。</p>
+<h3 id="背景">
+    <a href="#%e8%83%8c%e6%99%af" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    背景
+</h3>
+<p>windows10をサクサク動かせないPCを普段使いするためにはどうすればいいのだろうか？という問題が与えられたとき、大体ubuntuとかlinux mintみたいな軽量ディストロがおすすめされると思うのですが、あえてウィンドウマネージャーの方から攻めてみたいと思ったので書きます。</p>
+<h3 id="導入とか">
+    <a href="#%e5%b0%8e%e5%85%a5%e3%81%a8%e3%81%8b" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    導入とか
+</h3>
+<p>dotfileとかどうせ上げてるんだろ？ → はい。<a href="https://github.com/phnyo/dotfiles">これ</a>です。見たければ見てもいいよ。</p>
+<p><a href="https://i3wm.org">i3</a>はフリーソースのタイル型ウィンドウマネージャです。
+タイル型ウィンドウマネージャは、画面上のアプリケーションを画面を埋めるように配置します。</p>
+<p>個人的に感じるi3のメリットは、カーソルを動かす必要がない（＝キーボード上で操作が完結する）ことと、バッテリーの持ちが非常に良くなることです。
+もちろん<code>acpi</code>で充電の上限は設けていますが、大体70%充電しておけば６時間程度は使えるはずです。
+さらに、<code>feh</code>などを用いることで背景を設定することもでき、<code>i3bar</code>や<code>i3status</code>を調整することで、天気やバッテリー情報などを常時表示することもできます。</p>
+<h4 id="導入方法">
+    <a href="#%e5%b0%8e%e5%85%a5%e6%96%b9%e6%b3%95" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    導入方法
+</h4>
+<p>i3は文献があまりになさすぎるので、いつもの<a href="https://wiki.archlinux.jp/index.php/I3">arch wiki</a>に全面的に頼ることになります。
+私も全面的に頼りました。</p>
+<p>archで入れているわけではないので、ubuntuを使いつつ入れる方法を説明します。</p>
+<p>公式でおすすめされているのは、配布されているtarballを用いる方法ですが、<code>apt</code>でも拾ってこれます。</p>
+<pre tabindex="0"><code>sudo apt install i3 i3-wm
+</code></pre><p>このくらいで十分だった気がする。
+足りなくなったら都度足してください。</p>
+<p>i3をインストールすると、ログイン画面の右下に歯車マークが出て、ログイン後のウィンドウマネージャが選べるようになります。
+これでi3を選択してログインすれば、無事にインストール完了です。</p>
+<h3 id="操作">
+    <a href="#%e6%93%8d%e4%bd%9c" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    操作
+</h3>
+<p>i3はまあまあ独特な動きをします（vimよりは習得コストが低いかもしれない）。
+キーマップの完全版は<a href="https://i3wm.org/docs/userguide.html#_default_keybindings">Default Keybindings</a>を参照してください。</p>
+<p>i3を使う際には<code>mod</code>と呼ばれる特殊キーを設定する必要があります。
+私はaltキーに設定して使っていますが、この<code>mod</code>キーと何らかのキーを同時に押すことで画面の操作を行います。</p>
+<p>例えば、<code>mod + 1</code>なら1番目のウィンドウに移動します。
+また、<code>mod + shift + 1</code>なら現在のウィンドウを1番目のウィンドウに移動させます。
+意味がわかりませんね。手を動かさないと理解できないので自分で頑張ってi3を使ってみてください。</p>
+<h3 id="i3">
+    <a href="#i3" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    i3
+</h3>
+<p>i3の設定ファイルは、ルート直下の<code>.config/i3/config</code>になります。
+デフォルトでは生成されていなかったと思うので、そのようなファイルを新しく作って設定してあげると勝手にファイルを見に行ってくれます。
+確か開発レポジトリをクローンしてきてブランチをcheckoutするとデフォの設定が入っているconfigがあるはずです。
+おそらく初見で利用する際にはそれをコピー・コピーアンドペーストするといいと思います。</p>
+<p>私が追記している設定は確かこんな感じです。</p>
+<pre tabindex="0"><code>画面閉じたらスリープさせる(だった気がする)
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+日本語入力用のibusを裏で起動
+exec --no-startup-id ibus-daemon -x -d -r
+
+背景の起動
+exec --no-startup-id ~/.fehbg
+
+明るさ
+exec --no-startup-id compton -cbm 0.6
+
+通知マネージャのDunstをきちんと動かしたかった...
+exec --no-startup-id dunst -print -config &quot;/home/n/.config/dunst/dunstrc&quot;
+
+音量の上げ下げ
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% &amp;&amp; $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% &amp;&amp; $refresh_i3status
+
+ミュート
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle &amp;&amp; $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle &amp;&amp; $refresh_i3status
+
+音量調整
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
+</code></pre><p>音量調整はだるいというかリファレンスがなくてstack overflowとかに頼りまくりですが多分これで動くはず。</p>
+<h3 id="i3bar">
+    <a href="#i3bar" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    i3bar
+</h3>
+<p>大抵のOSは（勝手、あるいは不親切もしくは手を回しすぎているので）上か下に何らかの情報を表示するバーみたいなのがあります。
+i3のバーはデフォルトではクソダサなのでどうにかこうにか整えていきましょう。</p>
+<p><code>(username)/.config/i3/config</code>の一番下にバーという項目があります。
+<a href="https://i3wm.org/docs/userguide.html#_configuring_i3bar">いろんな設定ができる</a>ので、適当に参照して動かしてください。
+この設定の中で割と参照される設定は<code>font</code>、<code>colors</code>、<code>position</code>とかだと思います。</p>
+<ul>
+<li><code>font</code>はまあフォントなんですが、実は記号っぽい（例：バッテリーとか）を付け加えるフォントが存在し、それを利用するとメモリマークなどを表示させることができます。詳しくは<code>Awesome Font</code>で調べてみてください。</li>
+<li><code>colors</code>は色ですが、RGB16進表示で色変できます。よかったですね。</li>
+<li><code>position</code>は確かtopとbottomしかないのですが、位置は変えられます。よかったですね２。</li>
+</ul>
+<p>いや肝心の表示するものは！？という話ですが、この設定は<code>(username)/.config/i3status/config</code>で行います。
+このファイルもデフォルトでは存在しないので、作ってくださいね。</p>
+<p>i3statusの設定によってバーに表示されるものの指定を行うことができます。
+私のstatusにはこんな感じのものが表示されているらしいです。</p>
+<pre tabindex="0"><code>order += &quot;read_file spotify&quot;
+order += &quot;read_file weather&quot;
+order += &quot;cpu_usage&quot;
+order += &quot;memory&quot;
+order += &quot;battery all&quot;
+order += &quot;tztime local&quot;
+order += &quot;wireless _first_&quot;
+order += &quot;volume master&quot;
+</code></pre><p><code>read_file</code>以外はそれぞれの機器の現在の状況を読み取って表示してくれます。あとは<a href="https://i3wm.org/docs/i3status.html">詳細</a>を読んでね。</p>
+<p><code>read_file</code>はファイルを読んで表示してくれる感じのやつです。
+上のspotify、weatherはそれぞれspotifyと<a href="wttr.in">wttr.in</a>から情報を拾ってきて表示するスクリプ卜のログを読んでいます。wttr.inはたまに止まってバグってわろてる。</p>
+<p>まあこんな感じでカスタマイズできます。</p>
+<h3 id="スクリプトについて">
+    <a href="#%e3%82%b9%e3%82%af%e3%83%aa%e3%83%97%e3%83%88%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    スクリプトについて
+</h3>
+<p>スクリプトっていってもどういうスクリプトやねん。
+はい。</p>
+<pre tabindex="0"><code>#/usr/bin/bash
+
+WEATHER_LOG=&quot;/home/$(whoami)/.cache/weather/weather.log&quot;
+
+echo &quot;Tsukuba &quot; &gt; $WEATHER_LOG
+curl wttr.in/Tsukuba?format=1 | tr -d '\n ' &gt;&gt; $WEATHER_LOG 
+echo &quot; / Unga &quot; &gt;&gt; $WEATHER_LOG
+curl wttr.in/Unga.Station?format=1 | tr -d '\n ' &gt;&gt; $WEATHER_LOG
+</code></pre><p>こんなん。大学が運河にあり、家がつくばにあるので<code>curl</code>してそれを表示しています。
+<code>cron</code>で15分ごとに更新される手筈だが、wttr.inの天気の更新が遅いのでもはや参考情報にしかならないので観葉植物みたいなもん。spotifyのも同じ感じで、これもspofityを動かしてないといけないので観葉植物もどき。</p>
+<p>あとディスプレイの照度調整をするスクリプトを書かないと照度調整ができなかった（カス！）ので、それも書いた。</p>
+<pre tabindex="0"><code>CURRENT_VAL=$(cat /sys/class/backlight/intel_backlight/actual_brightness)
+MAX_VAL=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+
+if [ $1 = '-' ]; then
+  echo $(expr $CURRENT_VAL - $(expr $MAX_VAL / 20)) &gt; /sys/class/backlight/intel_backlight/brightness
+elif [ $1 = '+' ]; then
+  echo $(expr $CURRENT_VAL + $(expr $MAX_VAL / 20)) &gt; /sys/class/backlight/intel_backlight/brightness
+fi
+</code></pre><p><code>/sys/class/backlight/intel_backlight/brightness</code>を読み書きすることで明るさ調整をしているらしいので、入力によってプラスしたりマイナスしたりした値を返すようにしています。なぜこれが組み込まれていないか謎。</p>
+<h3 id="ファイル管理について">
+    <a href="#%e3%83%95%e3%82%a1%e3%82%a4%e3%83%ab%e7%ae%a1%e7%90%86%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    ファイル管理について
+</h3>
+<p>dotfileというレポを作って、<code>init.sh</code>で初期設定を勝手にできるようにしています。というか.vimrcと.bashrcもあるので、それはrootにおいて、それ以外は.configを作成してそれに突っ込んでる。ubuntuでしか動かんが、ワシはそれでいいのでそれでいい。</p>
+<h3 id="結論">
+    <a href="#%e7%b5%90%e8%ab%96" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    結論
+</h3>
+<p>i3を使いたい気持ちになりましたか？早くwindowsかOS Xをディスクから完全に消し去り、i3と心中しましょう。おわり。</p>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/post/monad/" title="Previous post (older)">
+            <span>Previous</span>
+            The Road to Monads: Monadについて
+            </a>
+        
+        
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+        </nav>
+
+        
+    </section>
+    <script defer src="/ts/features.c81551cd4dbef120af278f16966a41142c02be9ff5d6a669be09820fbf047456.js" 
+    data-enable-footnotes="true"
+    ></script>
+</footer>
+
+    </body>
+</html>
