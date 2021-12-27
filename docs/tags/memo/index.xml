@@ -6,7 +6,21 @@
     <description>Recent content in memo on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Tue, 21 Dec 2021 00:16:14 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/memo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 23 Dec 2021 16:42:30 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/memo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust覚え書き</title>
+      <link>https://miso.sabanium.me/post/rust/</link>
+      <pubDate>Thu, 23 Dec 2021 16:42:30 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/rust/</guid>
+      <description>入出力  String型のbufへの入力
+use std::io::Read; fn main() { let mut buf = String::new(); std::io::stdin().read_to_string(&amp;amp;mut buf).unwrap(); } i64型の配列への入力
+let mut iter = buf.split(&amp;quot;\n&amp;quot;); let v1:Vec&amp;lt;i64&amp;gt; = iter.next().unwrap().split_whitespace().map(|x| x.parse::&amp;lt;i64&amp;gt;().unwrap()).collect(); もしくは可読性を上げて
+let mut iter = buf.split(&amp;quot;\n&amp;quot;); let v1:Vec&amp;lt;i64&amp;gt; = iter.next().unwrap().split_whitespace().map(|x| { x.parse::&amp;lt;i64&amp;gt;().unwrap() }).collect();    配列  VectorでもArrayでもいい。Collect()するとVec&amp;lt;T&amp;gt;になる。
+Arrayの初期化
+分かっている状態での初期化 let arr: [T; num of elements] = [直書き] 繰り返したいとき let arr: [T; num of elements] = [elem; num of elements]    debug  type check</description>
+    </item>
+    
     <item>
       <title>i3wmをubuntuで導入し、いい感じにする</title>
       <link>https://miso.sabanium.me/post/i3/</link>
