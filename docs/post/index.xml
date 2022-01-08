@@ -6,14 +6,34 @@
     <description>Recent content in Posts on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 23 Dec 2021 16:42:30 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 08 Jan 2022 17:44:20 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>四方対象読書メモ</title>
+      <link>https://miso.sabanium.me/post/quadraple/</link>
+      <pubDate>Sat, 08 Jan 2022 17:44:20 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/quadraple/</guid>
+      <description>オブジェクト指向存在論ってなんだよ。
+   1章  「対象」とはなに？素朴な観点からはもののこと。トマトは対象。アンパンマンも実在はしていないが対象。実在・非実在、物理的・非物理的にかかわらずそう認識されていれば対象。
+その「対象」に対していままで取られてきたアプローチには3つの方法があると指摘。
+ 解体  　いろいろなもの（例：ろうそくの火）とかはあるけど、より基本的な要素に還元可能だよね、という主張。 古くはタレスの水とか。 そこから派生して、統一されたもの（アペイロン）から分割されたり、分割されたものがあらゆるものに進化しうる可能性を持つなどの考えもこれに当てはまる。
+　批判は難しそうだったので追記。
+埋却  　ものはより大きな性質の一部だよね、という主張。 経験論では、りんごを「赤」などの何らかの性質を寄せ集めた性質の束であり（有限か無限かは議論されていないが、まあとりあえず有限ということにしておかないと面倒くさいのでそうする）、習慣的に経験する性質の集合のニックネームであるとする。
+　対象が経験の中にないなら、経験の外について考えればいいのだが、その対象の実在を仮定することはできない（当たり前だが）。 そこで、経験の外の世界を否定する立場と、対象が経験自体である（＝世界、あるいは事物との相関にしかアクセスできない）という立場が現れる。 後者を相関主義という。 さらに、相関主義を推し進めて、人間と世界が特別なのではなく、事物の性質は事物と事物の関係によって基礎付けられるとの考えもある。 これは関係主義である。
+　これらはいずれも対象をより大きなもの（性質、相関、関係）の中にまとめ上げることである。 これの批判はなんか難しそうだったので追記。
+解体して埋却  　いや唯物論を推し進めた先の事物の性質は語れるんじゃね？という主張。 たし🦀。 個別の対象ではなく、原子についての性質は述べられたりするよね、ということであらゆる対象は原子にまで分割可能だけど原子自体の性質を語ることはできるから、解体して埋却している。 :thinking_face:になるけど、結局は経験が必要になる以上、存在に対していらんもん加えてるから今度は経験の実在を検証する必要があるよね。 逆に経験のみから対象を議論するためには外部のもの（神とか亡霊とか）が必要になるからこっちも論点をすり替えているだけであんまり意味がない。
+対象  　じゃあ何を議論すればいいんだ、というところで対象が出てくる。 ソクラテスは「メノン」で執拗に徳について問うていたが（ちょっとキモいレベルで）、その徳の実在については全く触れなかった。 彼（あるいは彼女）が触れていたのは徳の性質のみであって、それは対象が性質よりもより深い層にあるということである。 例としては、りんごを食べるときに我々が感じるのはりんごの果肉の食感と甘さとかすかな酸っぱさであり、視覚的な赤さではあるが、これで本当にりんごを食べているかというとそうではない。 りんごの性質に操作を加えたかもしれないが、それは対象とするりんご本体にアクセスしている訳ではないということ（例が下手くそ）。
+　対象についてはこんな感じ。むずいっす。</description>
+    </item>
+    
     <item>
       <title>Rust覚え書き</title>
       <link>https://miso.sabanium.me/post/rust/</link>
       <pubDate>Thu, 23 Dec 2021 16:42:30 +0900</pubDate>
       
       <guid>https://miso.sabanium.me/post/rust/</guid>
-      <description>入出力  String型のbufへの入力
+      <description>First, you&amp;rsquo;d better refer to Rust by Example for best solutions (of course, they&amp;rsquo;re the pro!).
+   入出力  String型のbufへの入力
 use std::io::Read; fn main() { let mut buf = String::new(); std::io::stdin().read_to_string(&amp;amp;mut buf).unwrap(); } i64型の配列への入力
 let mut iter = buf.split(&amp;quot;\n&amp;quot;); let v1:Vec&amp;lt;i64&amp;gt; = iter.next().unwrap().split_whitespace().map(|x| x.parse::&amp;lt;i64&amp;gt;().unwrap()).collect(); もしくは可読性を上げて
 let mut iter = buf.split(&amp;quot;\n&amp;quot;); let v1:Vec&amp;lt;i64&amp;gt; = iter.next().unwrap().split_whitespace().map(|x| { x.parse::&amp;lt;i64&amp;gt;().unwrap() }).collect();    配列  VectorでもArrayでもいい。Collect()するとVec&amp;lt;T&amp;gt;になる。

@@ -13,7 +13,8 @@
       <pubDate>Thu, 23 Dec 2021 16:42:30 +0900</pubDate>
       
       <guid>https://miso.sabanium.me/post/rust/</guid>
-      <description>入出力  String型のbufへの入力
+      <description>First, you&amp;rsquo;d better refer to Rust by Example for best solutions (of course, they&amp;rsquo;re the pro!).
+   入出力  String型のbufへの入力
 use std::io::Read; fn main() { let mut buf = String::new(); std::io::stdin().read_to_string(&amp;amp;mut buf).unwrap(); } i64型の配列への入力
 let mut iter = buf.split(&amp;quot;\n&amp;quot;); let v1:Vec&amp;lt;i64&amp;gt; = iter.next().unwrap().split_whitespace().map(|x| x.parse::&amp;lt;i64&amp;gt;().unwrap()).collect(); もしくは可読性を上げて
 let mut iter = buf.split(&amp;quot;\n&amp;quot;); let v1:Vec&amp;lt;i64&amp;gt; = iter.next().unwrap().split_whitespace().map(|x| { x.parse::&amp;lt;i64&amp;gt;().unwrap() }).collect();    配列  VectorでもArrayでもいい。Collect()するとVec&amp;lt;T&amp;gt;になる。

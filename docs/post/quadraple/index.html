@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="theme-color" content="dark">
-    <title>Rust覚え書き | 鯖の味噌煮がおいしく炊けない</title>
+    <title>四方対象読書メモ | 鯖の味噌煮がおいしく炊けない</title>
 
     
     
     
     <meta property="og:site_name" content="" />
-    <meta property="og:title" content="Rust覚え書き | 鯖の味噌煮がおいしく炊けない"/>
-    <meta itemprop="name" content="Rust覚え書き | 鯖の味噌煮がおいしく炊けない" />
-    <meta name="twitter:title" content="Rust覚え書き | 鯖の味噌煮がおいしく炊けない" />
-    <meta name="application-name" content="Rust覚え書き | 鯖の味噌煮がおいしく炊けない" />
+    <meta property="og:title" content="四方対象読書メモ | 鯖の味噌煮がおいしく炊けない"/>
+    <meta itemprop="name" content="四方対象読書メモ | 鯖の味噌煮がおいしく炊けない" />
+    <meta name="twitter:title" content="四方対象読書メモ | 鯖の味噌煮がおいしく炊けない" />
+    <meta name="application-name" content="四方対象読書メモ | 鯖の味噌煮がおいしく炊けない" />
 
 
     <meta name="description" content="" />
@@ -27,8 +27,8 @@
 
 <meta property="og:type" content="article" />
 <meta property="article:publisher" content="" />
-<meta property="og:article:published_time" content=2021-12-23T16:42:30&#43;0900 />
-<meta property="article:published_time" content=2021-12-23T16:42:30&#43;0900 />
+<meta property="og:article:published_time" content=2022-01-08T17:44:20&#43;0900 />
+<meta property="article:published_time" content=2022-01-08T17:44:20&#43;0900 />
 
 
 
@@ -38,16 +38,16 @@
   {
     "@context": "http://schema.org",
     "@type": "Article",
-    "headline": "Rust覚え書き",
+    "headline": "四方対象読書メモ",
     "author": {
       "@type": "Person",
       "name": ""
     },
-    "datePublished": "2021-12-23",
+    "datePublished": "2022-01-08",
     "description": "",
-    "wordCount":  117 ,
+    "wordCount":  32 ,
     "mainEntityOfPage": "True",
-    "dateModified": "2021-12-23",
+    "dateModified": "2022-01-08",
     "publisher": {
       "@type": "Organization",
       "name": "",
@@ -110,19 +110,21 @@
         <header class="article-header">
             <div class="thumb">
                 <div>
-                    <h1>Rust覚え書き</h1>
+                    <h1>四方対象読書メモ</h1>
                     <div class="post-meta">
                         <div>
                             
                             
                               
                             
-                            By  | <time>December 23, 2021</time>
+                            By  | <time>January 08, 2022</time>
                             | 1 minutes
                         </div>
                         <div class="tags">
                             
-                            <a href="/tags/rust/">rust</a>
+                            <a href="/tags/philosophy/">philosophy</a>
+                            
+                            <a href="/tags/quadraple_object/">quadraple_object</a>
                             
                             <a href="/tags/memo/">memo</a>
                             
@@ -134,81 +136,56 @@
     </article>
 
     <div class="article-post">
-    <p>First, you&rsquo;d better refer to <a href="https://doc.rust-lang.org/rust-by-example/">Rust by Example</a> for best solutions (of course, they&rsquo;re the pro!).</p>
-<h3 id="入出力">
-    <a href="#%e5%85%a5%e5%87%ba%e5%8a%9b" class="anchor">
+    <p>オブジェクト指向存在論ってなんだよ。</p>
+<h3 id="1章">
+    <a href="#1%e7%ab%a0" class="anchor">
         <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
             <path fill-rule="evenodd"
                 d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
             </path>
         </svg>
     </a>
-    入出力
+    1章
 </h3>
-<p><code>String</code>型の<code>buf</code>への入力</p>
-<pre tabindex="0"><code>use std::io::Read;
+<p>「対象」とはなに？素朴な観点からはもののこと。トマトは対象。アンパンマンも実在はしていないが対象。実在・非実在、物理的・非物理的にかかわらずそう認識されていれば対象。</p>
+<p>その「対象」に対していままで取られてきたアプローチには3つの方法があると指摘。</p>
+<ol>
+<li><strong>解体</strong></li>
+</ol>
+<p>　いろいろなもの（例：ろうそくの火）とかはあるけど、より基本的な要素に還元可能だよね、という主張。
+古くはタレスの水とか。
+そこから派生して、統一されたもの（アペイロン）から分割されたり、分割されたものがあらゆるものに進化しうる可能性を持つなどの考えもこれに当てはまる。</p>
+<p>　批判は難しそうだったので追記。</p>
+<ol start="2">
+<li><strong>埋却</strong></li>
+</ol>
+<p>　ものはより大きな性質の一部だよね、という主張。
+経験論では、りんごを「赤」などの何らかの性質を寄せ集めた性質の束であり（有限か無限かは議論されていないが、まあとりあえず有限ということにしておかないと面倒くさいのでそうする）、習慣的に経験する性質の集合のニックネームであるとする。</p>
+<p>　対象が経験の中にないなら、経験の外について考えればいいのだが、その対象の実在を仮定することはできない（当たり前だが）。
+そこで、経験の外の世界を否定する立場と、対象が経験自体である（＝世界、あるいは事物との相関にしかアクセスできない）という立場が現れる。
+後者を相関主義という。
+さらに、相関主義を推し進めて、人間と世界が特別なのではなく、事物の性質は事物と事物の関係によって基礎付けられるとの考えもある。
+これは関係主義である。</p>
+<p>　これらはいずれも対象をより大きなもの（性質、相関、関係）の中にまとめ上げることである。
+これの批判はなんか難しそうだったので追記。</p>
+<ol start="3">
+<li><strong>解体して埋却</strong></li>
+</ol>
+<p>　いや唯物論を推し進めた先の事物の性質は語れるんじゃね？という主張。
+たし🦀。
+個別の対象ではなく、原子についての性質は述べられたりするよね、ということであらゆる対象は原子にまで分割可能だけど原子自体の性質を語ることはできるから、解体して埋却している。
+:thinking_face:になるけど、結局は経験が必要になる以上、存在に対していらんもん加えてるから今度は経験の実在を検証する必要があるよね。
+逆に経験のみから対象を議論するためには外部のもの（神とか亡霊とか）が必要になるからこっちも論点をすり替えているだけであんまり意味がない。</p>
+<ol start="4">
+<li><strong>対象</strong></li>
+</ol>
+<p>　じゃあ何を議論すればいいんだ、というところで対象が出てくる。
+ソクラテスは「メノン」で執拗に徳について問うていたが（ちょっとキモいレベルで）、その徳の実在については全く触れなかった。
+彼（あるいは彼女）が触れていたのは徳の性質のみであって、それは対象が性質よりもより深い層にあるということである。
+例としては、りんごを食べるときに我々が感じるのはりんごの果肉の食感と甘さとかすかな酸っぱさであり、視覚的な赤さではあるが、これで本当にりんごを食べているかというとそうではない。
+りんごの性質に操作を加えたかもしれないが、それは対象とするりんご本体にアクセスしている訳ではないということ（例が下手くそ）。</p>
+<p>　対象についてはこんな感じ。むずいっす。</p>
 
-fn main() {
-    let mut buf = String::new();
-    std::io::stdin().read_to_string(&amp;mut buf).unwrap();
-}
-</code></pre><p><code>i64</code>型の配列への入力</p>
-<pre tabindex="0"><code>let mut iter = buf.split(&quot;\n&quot;);
-let v1:Vec&lt;i64&gt; = iter.next().unwrap().split_whitespace().map(|x| x.parse::&lt;i64&gt;().unwrap()).collect();
-</code></pre><p>もしくは可読性を上げて</p>
-<pre tabindex="0"><code>let mut iter = buf.split(&quot;\n&quot;);
-let v1:Vec&lt;i64&gt; = iter.next().unwrap().split_whitespace().map(|x| {
-                    x.parse::&lt;i64&gt;().unwrap()
-                  }).collect();
-</code></pre><h3 id="配列">
-    <a href="#%e9%85%8d%e5%88%97" class="anchor">
-        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-            <path fill-rule="evenodd"
-                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
-            </path>
-        </svg>
-    </a>
-    配列
-</h3>
-<p>VectorでもArrayでもいい。<code>Collect()</code>すると<code>Vec&lt;T&gt;</code>になる。</p>
-<p><code>Array</code>の初期化</p>
-<pre tabindex="0"><code>分かっている状態での初期化
-let arr: [T; num of elements] = [直書き]
-繰り返したいとき
-let arr: [T; num of elements] = [elem; num of elements]
-</code></pre><h3 id="debug">
-    <a href="#debug" class="anchor">
-        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-            <path fill-rule="evenodd"
-                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
-            </path>
-        </svg>
-    </a>
-    debug
-</h3>
-<p>type check</p>
-<pre tabindex="0"><code>use std::any::type_name;
-
-fn type_of&lt;T&gt;(_: T) -&gt; &amp;'static str {
-    type_name::&lt;T&gt;()
-}
-</code></pre><p>test</p>
-<p><em><strong>関数はlib.rsに書く</strong></em>
-<code>lib.rs</code>内では<code>crate::fn</code>、<code>main.rs</code>内では<code>(crate name)::fn</code>で関数にアクセスする。</p>
-<p><code>lib.rs</code>の例:</p>
-<pre tabindex="0"><code>#[cfg(test)]
-
-mod test {
-  #[test]
-  fn solve_test() {
-    assert_eq!(crate::solve(something), ans);
-  }
-}
-</code></pre><p><code>main.rs</code>の例:</p>
-<pre tabindex="0"><code>fn main() {
-  println!(&quot;{}&quot;, compro::solve(&amp;buf));
-}
-</code></pre>
     </div>
 </div>
 
@@ -216,17 +193,12 @@ mod test {
     
     <nav class="flex container suggested">
         
-        <a rel="prev" href="/post/i3/" title="Previous post (older)">
+        <a rel="prev" href="/post/rust/" title="Previous post (older)">
             <span>Previous</span>
-            i3wmをubuntuで導入し、いい感じにする
+            Rust覚え書き
             </a>
         
         
-        
-        <a rel="next" href="/post/quadraple/" title="Next post (newer)">
-            <span>Next</span>
-            四方対象読書メモ
-            </a> 
         
     </nav>
     
