@@ -6,7 +6,24 @@
     <description>Recent content in memo on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 08 Jan 2022 17:44:20 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/memo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 15 Jan 2022 17:06:56 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/memo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>存在と時間メモ</title>
+      <link>https://miso.sabanium.me/post/ex_and_time/</link>
+      <pubDate>Sat, 15 Jan 2022 17:06:56 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/ex_and_time/</guid>
+      <description>底本は光文社古典新訳文庫「存在と時間」（訳：中山元）。
+   001  存在は問われていない（＝自明なものとみなされている）。 存在の意味を解釈することで、時間を通じて存在了解（＝？）を可能にする。
+   002  略
+   序論     第一章 第一節     003  存在は忘れられた。
+   004  存在は、もっとも普遍的で空虚な概念（＝議論のうちのプリミティブな概念)であるとされ、自明なものとされた。
+   005  存在が自明であるとの先入観を抱かせた先入観は、古代の存在論を起源としている。 その検討のために、存在についての問いとその答えを明らかにしなければならない。 そのためにここで検討する先入観は3つある。
+   006 1. 存在の概念の普遍性  存在はもっとも普遍的であるとされる。 しかし、存在の普遍性は類(カテゴリーのこと)の普遍性ではない(これはアリストテレス？的な分類における種と類における類)。 存在者（存在するもの？）が類と種によって構造化されるなら、存在は類になることができない（すなわち、述語になれない）。 存在は「超越概念」である。 なんらかの事柄は、その一番の抽象化で多様な類によって記述されるが、存在はそれを超越してあらゆる物事をその射程に収めてしまう。 そこで、その存在の性質について「類比による統一」と名をつけた。 つまり、存在が普遍的であることは自明ではないし、あらゆる事物に対して適用可能なのも自明ではない。
+   007 2. 存在の定義不能性について  存在を定義することはできない。 それは(アリストテレスに従うならば)最も近い種との類差によって定義することができないということでもあり、何らかの存在者によって、もしくは上位下位の概念から定義できないということでもある。 ただし、これは「存在」が存在者のようなものではない、という事実と、定義を用いて存在を形作るということができないということを示唆するだけに過ぎない。
+   008 3.</description>
+    </item>
+    
     <item>
       <title>四方対象読書メモ</title>
       <link>https://miso.sabanium.me/post/quadraple/</link>

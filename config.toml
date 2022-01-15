@@ -1,0 +1,14 @@
+baseURL = 'https://miso.sabanium.me/'
+languageCode = 'ja-JP'
+title = "鯖の味噌煮がおいしく炊けない"
+theme = "hugo-tania"
+publishDir = "docs"
+[params]
+  [params.socialOptions]
+    twitter = "https://twitter.com/nuta_unagi_dog"
+[markup]
+  [markup.tableOfContents]
+    endlevel = 3
+    ordered = true
+    startlevel = 2
+    
