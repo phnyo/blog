@@ -6,7 +6,60 @@
     <description>Recent content in Posts on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 15 Jan 2022 17:06:56 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Jan 2022 17:18:53 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>哲学の起源メモ</title>
+      <link>https://miso.sabanium.me/post/origin_of_philosophy_kojin/</link>
+      <pubDate>Mon, 17 Jan 2022 17:18:53 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/origin_of_philosophy_kojin/</guid>
+      <description>   序論   普遍宗教    なぜ紀元前６世紀に同時多発的に思想家・宗教家が生じたのか。
+  マルクス主義では哲学・宗教を経済的基盤の上部構造として見る＝経済的な変化を仮定するが、必ずしも上手く説明できているわけではない。
+  宗教ベースで考えても、辻褄が合わない（ベルクソンの「愛の飛躍」）。
+  交換様式で説明できるのではないか。以下交換様式。
+      様式A 様式B 様式C 様式D     定義 贈与 支配-被支配 商品交換 システムの下での様式A      アニミズムにおける呪術は死者への贈与を通した霊の鎮静化(様式A)
+  呪術は贈与を通じて死者を物体として扱うためのテクノロジー的なもの
+  定住によって発達した（定住すると霊はコストになる）。
+  まだ神との間に贈与しあいという考えがある。
+  世界的な帝国になるためには軍事力＋経済力（様式B、C）が必要。
+  普遍宗教は、様式Aが解体されたのちにより高次なものとしてそれを再構成する（様式D）もの。
+  そのために宗教は脱呪術化する必要がある＝神を人に従わせない態度が必要（＝「神強制」ではなく「神礼拝」）。
+  例：ユダヤ教   作られたストーリーということに留意。 ユダヤ系の遊牧民が外圧により定住した。集団として新たな神を信奉した（まだ「神強制」）。 戦争に負けてバビロンの捕囚となった人たちは商人で知識階層が多かった（農耕民でも旧統制機構の下でもない）。 彼らは個人として神と契約した（＝集団としての「神強制」ではなく、「神礼拝」）。 その後、バビロンから帰還した際にユダヤ教が成立した。  模範的預言者   ウェーバーは同時代の思想家と宗教家をくくり、預言者とした。実践か言論かの違い。 宗教と哲学をわけることにあまり意味はない。イスラエルの預言者は吟味された人の言葉で、古代ギリシャ哲学の源泉はイオニアの神批判である。 中国に関してもおなじ。無為自然は様式A、様式Bによって成り立つ世の否定。仁義は様式A、Bではない倫理の模索（＝様式D)。     第一章  </description>
+    </item>
+    
+    <item>
+      <title>Pandoc</title>
+      <link>https://miso.sabanium.me/post/pandoc/</link>
+      <pubDate>Mon, 17 Jan 2022 02:13:58 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/pandoc/</guid>
+      <description>公式reference
+Pandocってなんだよ→マークダウンをいい感じにhtml/tex/pdf等にしてくれる便利なライブラリ
+    出力形式  -o で出力指定　-sで分割されていない状態として出力
+pdfはtexをかんでしまう(=日本語が使えない)ので、lualatexを使わざるを得ない。 指定の仕方としては例えば
+--pdf-engine=lualatex とする。
+フォント指定は-Vとか。 luaではluatexjapresetoptionsみたいなのが使える上に、フォントもちゃんと指定できる（俺にはIPA、お前しかいないんだ&amp;hellip;)
+   美しくする  -N: セクションというか章の前に数字をつける。</description>
+    </item>
+    
+    <item>
+      <title>CISCO 操作メモ</title>
+      <link>https://miso.sabanium.me/post/cisco/</link>
+      <pubDate>Sun, 16 Jan 2022 17:10:15 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/cisco/</guid>
+      <description>操作方法チートシート     スイッチ系  特権モードに切り替え
+enable 現在のconfig
+show running-config / show run copy current configuration file to the startup configuration file
+copy running-config startup-config terminal configuration
+configure terminal / config t    configuration  line console config
+console line (num) line console password
+password (password) login enable password
+enable password (passwd) enable secret
+enable secret (passwd) encryption
+service password-encryption message of the day</description>
+    </item>
+    
     <item>
       <title>存在と時間メモ</title>
       <link>https://miso.sabanium.me/post/ex_and_time/</link>

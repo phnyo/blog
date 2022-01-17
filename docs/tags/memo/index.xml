@@ -6,7 +6,40 @@
     <description>Recent content in memo on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 15 Jan 2022 17:06:56 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/memo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Jan 2022 02:13:58 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/memo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Pandoc</title>
+      <link>https://miso.sabanium.me/post/pandoc/</link>
+      <pubDate>Mon, 17 Jan 2022 02:13:58 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/pandoc/</guid>
+      <description>公式reference
+Pandocってなんだよ→マークダウンをいい感じにhtml/tex/pdf等にしてくれる便利なライブラリ
+    出力形式  -o で出力指定　-sで分割されていない状態として出力
+pdfはtexをかんでしまう(=日本語が使えない)ので、lualatexを使わざるを得ない。 指定の仕方としては例えば
+--pdf-engine=lualatex とする。
+フォント指定は-Vとか。 luaではluatexjapresetoptionsみたいなのが使える上に、フォントもちゃんと指定できる（俺にはIPA、お前しかいないんだ&amp;hellip;)
+   美しくする  -N: セクションというか章の前に数字をつける。</description>
+    </item>
+    
+    <item>
+      <title>CISCO 操作メモ</title>
+      <link>https://miso.sabanium.me/post/cisco/</link>
+      <pubDate>Sun, 16 Jan 2022 17:10:15 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/cisco/</guid>
+      <description>操作方法チートシート     スイッチ系  特権モードに切り替え
+enable 現在のconfig
+show running-config / show run copy current configuration file to the startup configuration file
+copy running-config startup-config terminal configuration
+configure terminal / config t    configuration  line console config
+console line (num) line console password
+password (password) login enable password
+enable password (passwd) enable secret
+enable secret (passwd) encryption
+service password-encryption message of the day</description>
+    </item>
+    
     <item>
       <title>存在と時間メモ</title>
       <link>https://miso.sabanium.me/post/ex_and_time/</link>
