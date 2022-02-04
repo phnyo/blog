@@ -6,7 +6,41 @@
     <description>Recent content in Posts on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 17 Jan 2022 17:18:53 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Feb 2022 15:12:08 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>中動態の世界 メモ</title>
+      <link>https://miso.sabanium.me/post/midvoice/</link>
+      <pubDate>Fri, 04 Feb 2022 15:12:08 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/midvoice/</guid>
+      <description>先に中動態とは何かということをざっくりと記しておく。以下はwikipediaからぱちってきたやつ。
+[200~中動態（ちゅうどうたい、ラテン語: [genus] medium、英語: middle [voice]）は、インド・ヨーロッパ語族の態のひとつ。能動態とは人称語尾によって区別される。中動態と受動態は形態の上で区別されないことが多い。中動態がよく残っている言語にサンスクリット、古代ギリシア語、アナトリア語派などがある。
+　現代では能動対受動であることに対して、昔は能動対中動であったという感じの話らしい。 それを念頭に置きつつ。
+   プロローグ  依存症患者のケア施設の人（多分）との会話。 「回復するとは回復することである」、という一般の意味体系とは違った意味の話。 薬物をやらないという強い意志を抱くことではなく、ただ回復という態度に回復を任せるようなもの（？）。
+『ただ回復するというプロセスがあるんだ、と』 言語が消滅する前に、p21より
+   第一章  私が為すということに、意志は関わっているのか？という問題。
+意志 := 物事を意識しつつ働きを為す力、である。 夢遊病患者は意識がないから意志をしない / がない。 でも意志はあたかも意識から自由になっているかのように語られている。 そこに矛盾がある。 さらに、意志があればその選択に責任が生ずる。 でも自由であって自由でないのに？
+スピノザは行為の原因が意識されず、ただそれが意志であると錯覚しているという。 そこで自由意志は自由に意志をもって行為を企図するということではなく、強制された行為を自由な意志で行ったと解釈するということ。
+例：私は歩いている。 歩いているという選択をしたのは私だが、歩くことの一挙一動を意志としてもって歩いているのか？No. 私は歩くということを思ってはいるかもしれないが、実際に訪れるのは私の体が歩行をするという状態である。 私は歩くから私の体が歩行をする、という表現の引き算をするとそこには意志があることになる。 もしくは、構文自体に意志が宿っているとも言えるかもしれない。
+それを能動態vs中動態という区分で考える。
+   第二章  中動態の起源を考えていく。
+アリストテレスとかを参照しつつ、まずは中動態が受動態より先にあったことがわかる。 次に文法書の標準となった「テクネー」の読解における能動と受動というテーマが読解において反復され続けてきたといっている。
+   第三章  そこで、バンヴェニストを参照して能動ー受動が「為す」、「為される」の関係にあるのに対して能動ー中動が「過程の外にある」、「過程の中にある」という関係であることがわかった。 他に「在る」、「生きる」ということが能動態であることも書かれているがつながりがよくわからない。 最後に、アーレントの古代ギリシアでは意志という観念がなかったのではないか、というところで終わる。
+   第四章  デリダのバンヴェニスト批判の話だけど、バンヴェニストが概ね言っていることは言語には思考の可能性を制約する作用があり、哲学は中道体の抑制の上に発展してきた、ということ。 ここらへんの話はスノウ・クラッシュの中のシュメール人の話っぽくて面白い。</description>
+    </item>
+    
+    <item>
+      <title>Ctags</title>
+      <link>https://miso.sabanium.me/post/ctags/</link>
+      <pubDate>Tue, 01 Feb 2022 13:39:55 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/ctags/</guid>
+      <description>vimと相性がいいctagsを使いたい。
+   インストール  universal ctagsをう。
+なんかsnapでしか提供されていないけどあんま好きじゃないので、ソースからビルドする。 最後のmakeのところだけsudo make installじゃないと\usr\local\binにアクセスできないので特権を与える。
+    </description>
+    </item>
+    
     <item>
       <title>哲学の起源メモ</title>
       <link>https://miso.sabanium.me/post/origin_of_philosophy_kojin/</link>
@@ -131,6 +165,16 @@ i3をインストールすると、ログイン画面の右下に歯車マーク
 i3を使う際にはmodと呼ばれる特殊キーを設定する必要があります。 私はaltキーに設定して使っていますが、このmodキーと何らかのキーを同時に押すことで画面の操作を行います。
 例えば、mod + 1なら1番目のウィンドウに移動します。 また、mod + shift + 1なら現在のウィンドウを1番目のウィンドウに移動させます。 意味がわかりませんね。手を動かさないと理解できないので自分で頑張ってi3を使ってみてください。
    i3  i3の設定ファイルは、ルート直下の.config/i3/configになります。 デフォルトでは生成されていなかったと思うので、そのようなファイルを新しく作って設定してあげると勝手にファイルを見に行ってくれます。 確か開発レポジトリをクローンしてきてブランチをcheckoutするとデフォの設定が入っているconfigがあるはずです。 おそらく初見で利用する際にはそれをコピー・コピーアンドペーストするといいと思います。</description>
+    </item>
+    
+    <item>
+      <title>雑記</title>
+      <link>https://miso.sabanium.me/post/other/</link>
+      <pubDate>Tue, 21 Dec 2021 00:14:34 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/other/</guid>
+      <description>HHKBのキーボードコンフィギュレーション  sudo dpkg-reconfigure keyboard-(something).
+HHKBをwindows - alt-win入れ替え にするとx250と同じ感じでaltとwinの入れ替えができるようになる。</description>
     </item>
     
     <item>
