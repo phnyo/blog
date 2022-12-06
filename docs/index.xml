@@ -5,7 +5,112 @@
     <description>Recent content on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Fri, 04 Feb 2022 15:12:08 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Dec 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+    <title>RaspberryPiからの動画配信について</title>
+    <link>https://miso.sabanium.me/post/rpi-video/</link>
+    <pubDate>Fri, 02 Dec 2022 00:00:00 +0900</pubDate>
+    <author>sabanium</author>
+    <guid>https://miso.sabanium.me/post/rpi-video/</guid>
+    <description>
+        &lt;p&gt;これは&lt;a href=&#34;https://adventar.org/calendars/7447&#34;&gt;RICORA言語班 Advent Calendar&lt;/a&gt;の8日目の記事です。&lt;/p&gt;
+&lt;h3 id=&#34;背景&#34;&gt;
+    &lt;a href=&#34;#%e8%83%8c%e6%99%af&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    背景
+&lt;/h3&gt;
+&lt;p&gt;研究に使う可能性があるのでメモとして載せておく。ローカルネットワークでの利用をまず考えている。&lt;/p&gt;
+&lt;h3 id=&#34;結論&#34;&gt;
+    &lt;a href=&#34;#%e7%b5%90%e8%ab%96&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    結論
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;ffmpeg&lt;/strong&gt;を使おう。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://ffmpeg.org/&#34;&gt;ffmpeg&lt;/a&gt;は公式で&lt;code&gt;A complete, cross-platform solution to record, convert and stream audio and video.&lt;/code&gt;と名乗っているわけなので、もちろんstreamもできるわけである。&lt;/p&gt;
+&lt;p&gt;構成はこんなかんじ。あまりにも図の出来が良すぎて失神している。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;      +--------+
+      | camera |
+      +--------+
+           |
+          USB
+      +--------+                                                      +--------+
+      |  rspi  | [wifi IEEE 802.11/?] --- *LAN* --- [wifi / ethernet] | debian |
+      +--------+                                                      +--------+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;現在使っているのはデスクトップつきRaspibianであり、他の人があいまいにドライバを入れた可能性もあるが、カメラは一発で認識できていて、&lt;code&gt;/dev/video0&lt;/code&gt;にある(もちろん、時と共に移ろいゆく)。動作確認はVLCとかで画面に映し、挙動を監視するとできる。&lt;/p&gt;
+&lt;p&gt;さて、いまRaspiberry Piで見えている画面をいい感じに同一LANの中にいるクライアントに送りたいとする。まず検討すべきことは&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ffmpeg&lt;/code&gt;のオプション&lt;/li&gt;
+&lt;li&gt;配信におけるIPプロトコル（TCP / UDP どっち？）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;の二点だと考えられる。もちろん&lt;code&gt;ffmpeg&lt;/code&gt;以外のツールもあるが、いまは&lt;code&gt;ffmpeg&lt;/code&gt;の話をしているので多分これでよい。&lt;/p&gt;
+&lt;h4 id=&#34;raspberrypiでやるべきこと&#34;&gt;
+    &lt;a href=&#34;#raspberrypi%e3%81%a7%e3%82%84%e3%82%8b%e3%81%b9%e3%81%8d%e3%81%93%e3%81%a8&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    RaspberryPiでやるべきこと
+&lt;/h4&gt;
+&lt;p&gt;まず、オプションがありすぎるので適当に&lt;a href=&#34;https://geek.tacoskingdom.com/blog/49&#34;&gt;先人&lt;/a&gt;&lt;a href=&#34;https://i-beam.org/2020/05/05/remote-web-camera/&#34;&gt;のログ&lt;/a&gt;などを拝見させてもらおう。ありがとうございます！1つ目に関しては、特に無自覚に&lt;code&gt;raspivid&lt;/code&gt;が使えるかのように書かれているものの、&lt;code&gt;raspivid&lt;/code&gt;が使えるのは専用のカメラモジュールに限定されているようなので、注意が必要。&lt;/p&gt;
+&lt;p&gt;そのうえで、オプションを考えよう。マニュアルが長いが、まあ&lt;code&gt;-i&lt;/code&gt;がインプットでレート操作・動画サイズの変更などができることがわかればよい。とりあえずピクセルレートとかは最適にしてくれるっぽい（？）ので、適当なコーデックといい感じの&lt;code&gt;-preset ultrafast&lt;/code&gt;、&lt;code&gt;-tune zerolatency&lt;/code&gt;を指定することにする。動画のフォーマットは&lt;code&gt;mpegts&lt;/code&gt;にして、一旦は配信用にする。録画すると&lt;code&gt;.ts&lt;/code&gt;の拡張子のファイルが生成されるが、それをぶち込んで&lt;code&gt;.mp4&lt;/code&gt;のファイルを作ればよいはずなので、あまり問題はないと思っている。&lt;/p&gt;
+&lt;p&gt;コーデックに関しては、&lt;code&gt;h264&lt;/code&gt;よりも&lt;code&gt;h265&lt;/code&gt;の方が後継規格なのでよいが、まだ広まっていない（？）可能性もあるらしい。とりあえず&lt;code&gt;h265&lt;/code&gt;を採用して見えなかったら&lt;code&gt;h264&lt;/code&gt;にスイッチするという運用でもこのスケールなら問題ないように思える。付記しておくが、&lt;code&gt;h266&lt;/code&gt;も策定されたようなので、数年のうちにはそちらへの移行が始まる可能性が高い。&lt;/p&gt;
+&lt;p&gt;パケットサイズについてはネットワーク依存なのでよくわからないという感想が強いので、一旦は指定していないが、今後指定する可能性はある。例えばTCPは&lt;a href=&#34;https://en.wikipedia.org/wiki/Path_MTU_Discovery&#34;&gt;PMTUD&lt;/a&gt;を利用してパケットサイズを決めている。1300byteとか1000byteとかに指定するのが妥当かもしれない。&lt;/p&gt;
+&lt;p&gt;で、これらを鑑みると&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  ffmpeg \
+    -i /dev/video0 \
+    -vcodec libx265 \
+    -preset ultrafast \ 
+    -tune zerolatency \
+    -f mpegts \
+  udp://[client ip addr]:[port]&amp;amp;pkt_size=(...)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;となる。画面の一部がほしければまた別のオプションを指定すれば良い。実際には、Client IPはもちろんクライアントのIP Addressを入力するし、ポートも同様にする。蛇足だが、こういう感じのコマンドでオプションが多くなるとNovelAIで&lt;code&gt;anime girl, cute, ... {{loli, chubby}}&lt;/code&gt;などのプロンプトを入力するときの気持ちになるようになってしまった。&lt;/p&gt;
+&lt;p&gt;TCP / UDPの選択に関しては、どちらでもよいはずで、どうせそんなに輻輳とかが起きないだろという希望的観測と下調べが面倒くさいという理由で真面目に調べていない。一応ヘッダーの大きさがUDPだと小さいという話はあるものの、パケットサイズが大体1000byteくらいだとして、たかだか3%くらいしか効いてこないと思うので、300x300くらいの画面サイズでの動画の画質にどれくらい影響があるかわからない。動画にはUDPだろという短絡的な選択をしてしまっている。&lt;/p&gt;
+&lt;h4 id=&#34;クライアントサイドでやるべきこと&#34;&gt;
+    &lt;a href=&#34;#%e3%82%af%e3%83%a9%e3%82%a4%e3%82%a2%e3%83%b3%e3%83%88%e3%82%b5%e3%82%a4%e3%83%89%e3%81%a7%e3%82%84%e3%82%8b%e3%81%b9%e3%81%8d%e3%81%93%e3%81%a8&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    クライアントサイドでやるべきこと
+&lt;/h4&gt;
+&lt;p&gt;一方、こちらはクライアント側なので、自分のipを&lt;code&gt;ip addr&lt;/code&gt;とかで覗いてそれを書いておく。ポート番号は一応でかい数にしたほうがいい。サンプルで見たのは12000とか12001とかだが、他のサービスとポートがかぶらなければ正直なんでもいい。&lt;/p&gt;
+&lt;p&gt;クライアント側のツールもなんでもよいといえばなんでもよいのだが、まあ多機能であれば多少嬉しいので&lt;code&gt;ffplay&lt;/code&gt;で動作確認をして、その後&lt;code&gt;VLC&lt;/code&gt;を使うことにした。&lt;code&gt;-fflags nobuffer&lt;/code&gt;と&lt;code&gt;fflags&lt;/code&gt;を指定してあげると&lt;code&gt;Reduce the latency introduced by buffering during initial input streams analysis. &lt;/code&gt;&lt;a href=&#34;https://ffmpeg.org/ffplay-all.html&#34;&gt;ソース&lt;/a&gt;とのことで、簡単に訳すと初期のバッファリング分からの遅れを取り戻すみたいなオプションとのこと。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  ffplay [client ip addr]:[port]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;と打つと、しばらくしてから画面が立ち上がる。&lt;/p&gt;
+&lt;p&gt;一方、&lt;code&gt;VLC&lt;/code&gt;では&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  vlc udp://@:[port]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;と入力すると&lt;code&gt;VLC&lt;/code&gt;が勝手に受信するように立ち上がってくれる。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;VLC&lt;/code&gt;を使うといい感じに録画もできて良い。このような構成で、実感としては、大体2〜3秒くらいの遅れだった。&lt;/p&gt;
+&lt;h3 id=&#34;終わりに&#34;&gt;
+    &lt;a href=&#34;#%e7%b5%82%e3%82%8f%e3%82%8a%e3%81%ab&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    終わりに
+&lt;/h3&gt;
+&lt;p&gt;感想としてはかなり薄っぺらいが、こういう形で実際にポートとかIPアドレスとかを指定するとそのようなこともできるんですねという気持ちになって良い。我々はWIREDの中にいるのである。あ、いまlain見えましたよね。TCPに関しても使う可能性がある（データ取得で文句を言われたら重い腰を上げることにします。。。）ので追記したいと思っている。&lt;/p&gt;
+&lt;p&gt;また、twitterのアイコンとか見るとそれっぽいが、筆者はロリコンではない。&lt;/p&gt;
+
+    </description>
+    </item>
+    
     <item>
     <title>中動態の世界 メモ</title>
     <link>https://miso.sabanium.me/post/midvoice/</link>
@@ -341,7 +446,7 @@ login
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;encryption&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;service password-encryption
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;message of the day&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;banner motd &amp;quot;message&amp;quot;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;banner motd &amp;#34;message&amp;#34;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;interface (vlan)&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;interface vlan (num)
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;複数個の場合&lt;/p&gt;
@@ -985,10 +1090,10 @@ fn main() {
     std::io::stdin().read_to_string(&amp;amp;mut buf).unwrap();
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;i64&lt;/code&gt;型の配列への入力&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;let mut iter = buf.split(&amp;quot;\n&amp;quot;);
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;let mut iter = buf.split(&amp;#34;\n&amp;#34;);
 let v1:Vec&amp;lt;i64&amp;gt; = iter.next().unwrap().split_whitespace().map(|x| x.parse::&amp;lt;i64&amp;gt;().unwrap()).collect();
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;もしくは可読性を上げて&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;let mut iter = buf.split(&amp;quot;\n&amp;quot;);
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;let mut iter = buf.split(&amp;#34;\n&amp;#34;);
 let v1:Vec&amp;lt;i64&amp;gt; = iter.next().unwrap().split_whitespace().map(|x| {
                     x.parse::&amp;lt;i64&amp;gt;().unwrap()
                   }).collect();
@@ -1021,7 +1126,7 @@ let arr: [T; num of elements] = [elem; num of elements]
 &lt;p&gt;type check&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;use std::any::type_name;
 
-fn type_of&amp;lt;T&amp;gt;(_: T) -&amp;gt; &amp;amp;&#39;static str {
+fn type_of&amp;lt;T&amp;gt;(_: T) -&amp;gt; &amp;amp;&amp;#39;static str {
     type_name::&amp;lt;T&amp;gt;()
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;test&lt;/p&gt;
@@ -1038,7 +1143,7 @@ mod test {
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;main.rs&lt;/code&gt;の例:&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;fn main() {
-  println!(&amp;quot;{}&amp;quot;, compro::solve(&amp;amp;buf));
+  println!(&amp;#34;{}&amp;#34;, compro::solve(&amp;amp;buf));
 }
 &lt;/code&gt;&lt;/pre&gt;
     </description>
@@ -1051,7 +1156,7 @@ mod test {
     <author>sabanium</author>
     <guid>https://miso.sabanium.me/post/i3/</guid>
     <description>
-        &lt;p&gt;これは&lt;a href=&#34;https://adventar.org/6389&#34;&gt;RICORA言語班 Advent Calendar&lt;/a&gt;の18日目の記事です。新入生相手におままごとをしていたら完全に書くのを忘れていたので、適当なことを書きます。すみません。&lt;/p&gt;
+        &lt;p&gt;これは&lt;a href=&#34;https://adventar.org/calendars/6389&#34;&gt;RICORA言語班 Advent Calendar&lt;/a&gt;の18日目の記事です。新入生相手におままごとをしていたら完全に書くのを忘れていたので、適当なことを書きます。すみません。&lt;/p&gt;
 &lt;h3 id=&#34;背景&#34;&gt;
     &lt;a href=&#34;#%e8%83%8c%e6%99%af&#34; class=&#34;anchor&#34;&gt;
         &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
@@ -1143,7 +1248,7 @@ exec --no-startup-id ~/.fehbg
 exec --no-startup-id compton -cbm 0.6
 
 通知マネージャのDunstをきちんと動かしたかった...
-exec --no-startup-id dunst -print -config &amp;quot;/home/n/.config/dunst/dunstrc&amp;quot;
+exec --no-startup-id dunst -print -config &amp;#34;/home/n/.config/dunst/dunstrc&amp;#34;
 
 音量の上げ下げ
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% &amp;amp;&amp;amp; $refresh_i3status
@@ -1181,14 +1286,14 @@ i3のバーはデフォルトではクソダサなのでどうにかこうにか
 このファイルもデフォルトでは存在しないので、作ってくださいね。&lt;/p&gt;
 &lt;p&gt;i3statusの設定によってバーに表示されるものの指定を行うことができます。
 私のstatusにはこんな感じのものが表示されているらしいです。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;order += &amp;quot;read_file spotify&amp;quot;
-order += &amp;quot;read_file weather&amp;quot;
-order += &amp;quot;cpu_usage&amp;quot;
-order += &amp;quot;memory&amp;quot;
-order += &amp;quot;battery all&amp;quot;
-order += &amp;quot;tztime local&amp;quot;
-order += &amp;quot;wireless _first_&amp;quot;
-order += &amp;quot;volume master&amp;quot;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;order += &amp;#34;read_file spotify&amp;#34;
+order += &amp;#34;read_file weather&amp;#34;
+order += &amp;#34;cpu_usage&amp;#34;
+order += &amp;#34;memory&amp;#34;
+order += &amp;#34;battery all&amp;#34;
+order += &amp;#34;tztime local&amp;#34;
+order += &amp;#34;wireless _first_&amp;#34;
+order += &amp;#34;volume master&amp;#34;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;read_file&lt;/code&gt;以外はそれぞれの機器の現在の状況を読み取って表示してくれます。あとは&lt;a href=&#34;https://i3wm.org/docs/i3status.html&#34;&gt;詳細&lt;/a&gt;を読んでね。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;read_file&lt;/code&gt;はファイルを読んで表示してくれる感じのやつです。
 上のspotify、weatherはそれぞれspotifyと&lt;a href=&#34;wttr.in&#34;&gt;wttr.in&lt;/a&gt;から情報を拾ってきて表示するスクリプ卜のログを読んでいます。wttr.inはたまに止まってバグってわろてる。&lt;/p&gt;
@@ -1207,21 +1312,21 @@ order += &amp;quot;volume master&amp;quot;
 はい。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#/usr/bin/bash
 
-WEATHER_LOG=&amp;quot;/home/$(whoami)/.cache/weather/weather.log&amp;quot;
+WEATHER_LOG=&amp;#34;/home/$(whoami)/.cache/weather/weather.log&amp;#34;
 
-echo &amp;quot;Tsukuba &amp;quot; &amp;gt; $WEATHER_LOG
-curl wttr.in/Tsukuba?format=1 | tr -d &#39;\n &#39; &amp;gt;&amp;gt; $WEATHER_LOG 
-echo &amp;quot; / Unga &amp;quot; &amp;gt;&amp;gt; $WEATHER_LOG
-curl wttr.in/Unga.Station?format=1 | tr -d &#39;\n &#39; &amp;gt;&amp;gt; $WEATHER_LOG
+echo &amp;#34;Tsukuba &amp;#34; &amp;gt; $WEATHER_LOG
+curl wttr.in/Tsukuba?format=1 | tr -d &amp;#39;\n &amp;#39; &amp;gt;&amp;gt; $WEATHER_LOG 
+echo &amp;#34; / Unga &amp;#34; &amp;gt;&amp;gt; $WEATHER_LOG
+curl wttr.in/Unga.Station?format=1 | tr -d &amp;#39;\n &amp;#39; &amp;gt;&amp;gt; $WEATHER_LOG
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;こんなん。大学が運河にあり、家がつくばにあるので&lt;code&gt;curl&lt;/code&gt;してそれを表示しています。
 &lt;code&gt;cron&lt;/code&gt;で15分ごとに更新される手筈だが、wttr.inの天気の更新が遅いのでもはや参考情報にしかならないので観葉植物みたいなもん。spotifyのも同じ感じで、これもspofityを動かしてないといけないので観葉植物もどき。&lt;/p&gt;
 &lt;p&gt;あとディスプレイの照度調整をするスクリプトを書かないと照度調整ができなかった（カス！）ので、それも書いた。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;CURRENT_VAL=$(cat /sys/class/backlight/intel_backlight/actual_brightness)
 MAX_VAL=$(cat /sys/class/backlight/intel_backlight/max_brightness)
 
-if [ $1 = &#39;-&#39; ]; then
+if [ $1 = &amp;#39;-&amp;#39; ]; then
   echo $(expr $CURRENT_VAL - $(expr $MAX_VAL / 20)) &amp;gt; /sys/class/backlight/intel_backlight/brightness
-elif [ $1 = &#39;+&#39; ]; then
+elif [ $1 = &amp;#39;+&amp;#39; ]; then
   echo $(expr $CURRENT_VAL + $(expr $MAX_VAL / 20)) &amp;gt; /sys/class/backlight/intel_backlight/brightness
 fi
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;/sys/class/backlight/intel_backlight/brightness&lt;/code&gt;を読み書きすることで明るさ調整をしているらしいので、入力によってプラスしたりマイナスしたりした値を返すようにしています。なぜこれが組み込まれていないか謎。&lt;/p&gt;
@@ -1405,7 +1510,7 @@ Monadの中の値を使うときに恒等射的な関数を考える必要が出
 &lt;p&gt;Maybeに対して実装するとこんな感じ。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(&amp;gt;&amp;gt;=) :: Maybe a -&amp;gt; (a -&amp;gt; Maybe b) -&amp;gt; Maybe b
 x (&amp;gt;&amp;gt;=) f = case x of
-  (Just x&#39;) -&amp;gt; f x&#39;
+  (Just x&amp;#39;) -&amp;gt; f x&amp;#39;
   Nothing -&amp;gt; Nothing
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;ここで&lt;code&gt;x&lt;/code&gt;は&lt;code&gt;Maybe x&#39;&lt;/code&gt;という型だとした。&lt;/p&gt;
 &lt;p&gt;さっきの&lt;code&gt;sqrtInverse&lt;/code&gt;をまた拾ってこよう。&lt;/p&gt;
@@ -1716,7 +1821,7 @@ mapはpythonとかの同名の関数と同じで、ある関数をリストの�
     Haskellのインストール
 &lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.haskell.org/downloads/&#34;&gt;これ&lt;/a&gt;を読んで、GHCupとHaskell Tool Stackの一番上の方にのってるcurlコマンドを叩く。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;curl --proto &amp;#39;=https&amp;#39; --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 curl -sSL https://get.haskellstack.org/ | sh
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;LSPは必要なので入れて、それ以外のものにも大体Yesと回答した気がする。なんかPとか押させるのが厄介。&lt;/p&gt;
 &lt;h3 id=&#34;haskell-language-serverの導入&#34;&gt;

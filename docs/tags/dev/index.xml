@@ -14,8 +14,8 @@
       
       <guid>https://miso.sabanium.me/post/c-haskell1/</guid>
       <description>構文解析のためのモナド等についてまとめる。完全に自分用。
-   Haskellの文法について  よく見るやつ
- 型拘束  (Ord a) =&amp;gt; a -&amp;gt; a  要素の存在  (x:xs) </description>
+Haskellの文法について よく見るやつ
+型拘束 (Ord a) =&amp;gt; a -&amp;gt; a 要素の存在 (x:xs) </description>
     </item>
     
     <item>
@@ -25,9 +25,9 @@
       
       <guid>https://miso.sabanium.me/post/c-haskell0/</guid>
       <description>まず環境構築をする。
-   Haskellのインストール  これを読んで、GHCupとHaskell Tool Stackの一番上の方にのってるcurlコマンドを叩く。
-curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh curl -sSL https://get.haskellstack.org/ | sh LSPは必要なので入れて、それ以外のものにも大体Yesと回答した気がする。なんかPとか押させるのが厄介。
-   Haskell Language Serverの導入  vim-lsp-settingsはHaskell Language Server(以下HLS)に対応していないがvim-lsp-settingsのissueを読むとそういうことが書いてあるので.vimrcを適当にいじるとうまくHLSが動く。
+Haskellのインストール これを読んで、GHCupとHaskell Tool Stackの一番上の方にのってるcurlコマンドを叩く。
+curl --proto &amp;#39;=https&amp;#39; --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh curl -sSL https://get.haskellstack.org/ | sh LSPは必要なので入れて、それ以外のものにも大体Yesと回答した気がする。なんかPとか押させるのが厄介。
+Haskell Language Serverの導入 vim-lsp-settingsはHaskell Language Server(以下HLS)に対応していないがvim-lsp-settingsのissueを読むとそういうことが書いてあるので.vimrcを適当にいじるとうまくHLSが動く。
 これでGHC+HLSが入った環境が準備できた。</description>
     </item>
     

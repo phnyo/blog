@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Adv2022 on 鯖の味噌煮がおいしく炊けない</title>
+    <link>https://miso.sabanium.me/tags/adv2022/</link>
+    <description>Recent content in Adv2022 on 鯖の味噌煮がおいしく炊けない</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <lastBuildDate>Fri, 02 Dec 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/adv2022/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RaspberryPiからの動画配信について</title>
+      <link>https://miso.sabanium.me/post/rpi-video/</link>
+      <pubDate>Fri, 02 Dec 2022 00:00:00 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/rpi-video/</guid>
+      <description>これはRICORA言語班 Advent Calendarの8日目の記事です。
+背景 研究に使う可能性があるのでメモとして載せておく。ローカルネットワークでの利用をまず考えている。
+結論 ffmpegを使おう。
+ffmpegは公式でA complete, cross-platform solution to record, convert and stream audio and video.と名乗っているわけなので、もちろんstreamもできるわけである。
+構成はこんなかんじ。あまりにも図の出来が良すぎて失神している。
++--------+ | camera | +--------+ | USB +--------+ +--------+ | rspi | [wifi IEEE 802.11/?] --- *LAN* --- [wifi / ethernet] | debian | +--------+ +--------+ 現在使っているのはデスクトップつきRaspibianであり、他の人があいまいにドライバを入れた可能性もあるが、カメラは一発で認識できていて、/dev/video0にある(もちろん、時と共に移ろいゆく)。動作確認はVLCとかで画面に映し、挙動を監視するとできる。
+さて、いまRaspiberry Piで見えている画面をいい感じに同一LANの中にいるクライアントに送りたいとする。まず検討すべきことは
+ffmpegのオプション 配信におけるIPプロトコル（TCP / UDP どっち？） の二点だと考えられる。もちろんffmpeg以外のツールもあるが、いまはffmpegの話をしているので多分これでよい。
+RaspberryPiでやるべきこと まず、オプションがありすぎるので適当に先人のログなどを拝見させてもらおう。ありがとうございます！1つ目に関しては、特に無自覚にraspividが使えるかのように書かれているものの、raspividが使えるのは専用のカメラモジュールに限定されているようなので、注意が必要。
+そのうえで、オプションを考えよう。マニュアルが長いが、まあ-iがインプットでレート操作・動画サイズの変更などができることがわかればよい。とりあえずピクセルレートとかは最適にしてくれるっぽい（？）ので、適当なコーデックといい感じの-preset ultrafast、-tune zerolatencyを指定することにする。動画のフォーマットはmpegtsにして、一旦は配信用にする。録画すると.tsの拡張子のファイルが生成されるが、それをぶち込んで.mp4のファイルを作ればよいはずなので、あまり問題はないと思っている。
+コーデックに関しては、h264よりもh265の方が後継規格なのでよいが、まだ広まっていない（？）可能性もあるらしい。とりあえずh265を採用して見えなかったらh264にスイッチするという運用でもこのスケールなら問題ないように思える。付記しておくが、h266も策定されたようなので、数年のうちにはそちらへの移行が始まる可能性が高い。
+パケットサイズについてはネットワーク依存なのでよくわからないという感想が強いので、一旦は指定していないが、今後指定する可能性はある。例えばTCPはPMTUDを利用してパケットサイズを決めている。1300byteとか1000byteとかに指定するのが妥当かもしれない。
+で、これらを鑑みると
+ffmpeg \ -i /dev/video0 \ -vcodec libx265 \ -preset ultrafast \ -tune zerolatency \ -f mpegts \ udp://[client ip addr]:[port]&amp;amp;pkt_size=(.</description>
+    </item>
+    
+  </channel>
+</rss>

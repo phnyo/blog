@@ -5,7 +5,7 @@ theme = "hugo-tania"
 publishDir = "docs"
 [params]
   [params.socialOptions]
-    twitter = "https://twitter.com/nuta_unagi_dog"
+    twitter = "https://twitter.com/nesoberist"
 [markup]
   [markup.tableOfContents]
     endlevel = 3

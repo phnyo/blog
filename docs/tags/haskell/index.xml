@@ -14,11 +14,11 @@
       
       <guid>https://miso.sabanium.me/post/monad/</guid>
       <description>この記事はThe Road to Monadsを意訳したものであり、RICORA Advent Calendarの11日目の記事です。
-   Monad  今までの流れを振り返ると、Functorは何らかの値のWrapperであり、fmapによってその要素に関数適用ができた。 Applicative Functorはそれをさらに発展させて、関数自体をFunctorで包むことによって、複数の引数を取る関数を実装できるようにしていたのだった。
+Monad 今までの流れを振り返ると、Functorは何らかの値のWrapperであり、fmapによってその要素に関数適用ができた。 Applicative Functorはそれをさらに発展させて、関数自体をFunctorで包むことによって、複数の引数を取る関数を実装できるようにしていたのだった。
 さて、何が足りないのだろう？ 実は、Applicative Functorだけでは関数を複数組み合わせることが難しい。 例えば、f :: a -&amp;gt; bとg :: b -&amp;gt; cがあったときに、Applicative Functorだとa -&amp;gt; f b、b -&amp;gt; f cに写すことはできてもa -&amp;gt; f cに写すことができない。 こういう関数の使い方をする機会は割と多い気がするし、こんな感じで書きたくない？という話。
 簡単にいえば、MonadはFunctorの中での関数合成を可能にする構造。 しかし、これだけだとMonadが実際に何をするかいまいちわからないので以下に書いていく。 導入として、大体FunctorみたいなものだとしてMonadmを使うことにしよう(とはいっても、実装上は拡張したApplicative型なんだからFunctorの拡張として捉えるほうが適切かもしれない）。
 じつはMonadは他の必要っぽいことも包摂してくれている。
- Monad上の関数の繰り返し適用に対して、Monadを圧縮する。a -&amp;gt; m bに対してまたfmapをつかってmを適用すると、m a -&amp;gt; m (m -&amp;gt; b)になってしまう。 例えば、a -&amp;gt; Maybe bならMaybe a -&amp;gt; Maybe ( Maybe b )的な。 これを圧縮して、繰り返し適用してもa -&amp;gt; Maybe bの型を作れるようにする。 さっきの例。 a -&amp;gt; m bとb -&amp;gt; m cからa -&amp;gt; m cの関数を作りだせる。 逆にm aが与えられたとき、a -&amp;gt; m bの関数を使えるようにする。     型の圧縮  まあこれだけだとよくわからないので、具体例を考えよう。 1 / sqrt (x)をMaybeを返すとして考える。 この関数を二つの関数1 / xとsqrt(x)の合成で考えるとすると、例えば1/0はundefinedなので、1 / xでx = 0ならNothingを返したい。 これはsqrt(x)でも一緒。x &amp;lt; 0ならNothingを返したい。 そこで、これらを実際に書いてみるとこんな感じ。</description>
+Monad上の関数の繰り返し適用に対して、Monadを圧縮する。a -&amp;gt; m bに対してまたfmapをつかってmを適用すると、m a -&amp;gt; m (m -&amp;gt; b)になってしまう。 例えば、a -&amp;gt; Maybe bならMaybe a -&amp;gt; Maybe ( Maybe b )的な。 これを圧縮して、繰り返し適用してもa -&amp;gt; Maybe bの型を作れるようにする。 さっきの例。 a -&amp;gt; m bとb -&amp;gt; m cからa -&amp;gt; m cの関数を作りだせる。 逆にm aが与えられたとき、a -&amp;gt; m bの関数を使えるようにする。 型の圧縮 まあこれだけだとよくわからないので、具体例を考えよう。 1 / sqrt (x)をMaybeを返すとして考える。 この関数を二つの関数1 / xとsqrt(x)の合成で考えるとすると、例えば1/0はundefinedなので、1 / xでx = 0ならNothingを返したい。 これはsqrt(x)でも一緒。x &amp;lt; 0ならNothingを返したい。 そこで、これらを実際に書いてみるとこんな感じ。</description>
     </item>
     
     <item>
@@ -28,7 +28,7 @@
       
       <guid>https://miso.sabanium.me/post/applicative/</guid>
       <description>この記事はThe Road to Monadsを意訳したものであり、RICORA Advent Calendarの9日目の記事です。
-   Applicative Functor  FunctorはWrapperで、fmapを使えば(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。 もちろん、これはカリー化されているので結局(a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f bと同じことである。
+Applicative Functor FunctorはWrapperで、fmapを使えば(a -&amp;gt; b)-&amp;gt;(f a -&amp;gt; f b)という風にFunctorの要素に対して関数を適用できたのだった。 もちろん、これはカリー化されているので結局(a -&amp;gt; b) -&amp;gt; f a -&amp;gt; f bと同じことである。
 でもこれだと問題があって、例えば
 f :: Int -&amp;gt; Int -&amp;gt; Int f a b = a * b みたいな関数をMaybe Intで置き換えて使おうと思ったときに使えない。 というか単純に一変数関数にしか使えん。 これはけっこうだるい。
 そこで、その代替策がApplicativeなのだがこれもこれとして理解し難い。 まずは関数定義から見てみよう。
@@ -42,7 +42,7 @@ class functor f =&amp;gt; Applicative f where pure :: a -&amp;gt; f a (&amp;lt;*
       
       <guid>https://miso.sabanium.me/post/functor/</guid>
       <description>この記事はThe Road to Monadsを意訳したものです。 あんまり難しいことは言っていないと思うんだけど、あまり頭に入らなかったので簡単に翻訳してみた。
-   Functor     fmap  Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。 圏論でいうところの関手。
+Functor fmap Functorって何? 内部の値にアクセスできるようにしたWrapper。具体例: IO、Maybeなど。 圏論でいうところの関手。
 コードでの具体例：
 addMaybe :: Num a =&amp;gt; Maybe a -&amp;gt; Maybe a -&amp;gt; Maybe a addMaybe (Just a) (Just b) = Just (a + b) addMaybe _ _ = Nothing 確かに内部の値にアクセスしている。まあこれは恣意的な関数だけど。 ただし、これを一般化するといい感じになってくれる。 要は内部の値にアクセスすることが重要で、例えばf :: Int -&amp;gt; Intはこういう関数を使うことでMaybe Intにも使えるようになったりする。
 次に、こんな関数を考える。
@@ -56,8 +56,8 @@ fmapList :: (a -&amp;gt; b) -&amp;gt; ([a] -&amp;gt; [b]) fmapList f [] = [] fma
       
       <guid>https://miso.sabanium.me/post/c-haskell1/</guid>
       <description>構文解析のためのモナド等についてまとめる。完全に自分用。
-   Haskellの文法について  よく見るやつ
- 型拘束  (Ord a) =&amp;gt; a -&amp;gt; a  要素の存在  (x:xs) </description>
+Haskellの文法について よく見るやつ
+型拘束 (Ord a) =&amp;gt; a -&amp;gt; a 要素の存在 (x:xs) </description>
     </item>
     
     <item>
@@ -67,9 +67,9 @@ fmapList :: (a -&amp;gt; b) -&amp;gt; ([a] -&amp;gt; [b]) fmapList f [] = [] fma
       
       <guid>https://miso.sabanium.me/post/c-haskell0/</guid>
       <description>まず環境構築をする。
-   Haskellのインストール  これを読んで、GHCupとHaskell Tool Stackの一番上の方にのってるcurlコマンドを叩く。
-curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh curl -sSL https://get.haskellstack.org/ | sh LSPは必要なので入れて、それ以外のものにも大体Yesと回答した気がする。なんかPとか押させるのが厄介。
-   Haskell Language Serverの導入  vim-lsp-settingsはHaskell Language Server(以下HLS)に対応していないがvim-lsp-settingsのissueを読むとそういうことが書いてあるので.vimrcを適当にいじるとうまくHLSが動く。
+Haskellのインストール これを読んで、GHCupとHaskell Tool Stackの一番上の方にのってるcurlコマンドを叩く。
+curl --proto &amp;#39;=https&amp;#39; --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh curl -sSL https://get.haskellstack.org/ | sh LSPは必要なので入れて、それ以外のものにも大体Yesと回答した気がする。なんかPとか押させるのが厄介。
+Haskell Language Serverの導入 vim-lsp-settingsはHaskell Language Server(以下HLS)に対応していないがvim-lsp-settingsのissueを読むとそういうことが書いてあるので.vimrcを適当にいじるとうまくHLSが動く。
 これでGHC+HLSが入った環境が準備できた。</description>
     </item>
     

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>-memo on 鯖の味噌煮がおいしく炊けない</title>
+    <link>https://miso.sabanium.me/tags/-memo/</link>
+    <description>Recent content in -memo on 鯖の味噌煮がおいしく炊けない</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <lastBuildDate>Tue, 21 Dec 2021 00:14:34 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/tags/-memo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>雑記</title>
+      <link>https://miso.sabanium.me/post/other/</link>
+      <pubDate>Tue, 21 Dec 2021 00:14:34 +0900</pubDate>
+      
+      <guid>https://miso.sabanium.me/post/other/</guid>
+      <description>HHKBのキーボードコンフィギュレーション sudo dpkg-reconfigure keyboard-(something).
+HHKBをwindows - alt-win入れ替え にするとx250と同じ感じでaltとwinの入れ替えができるようになる。</description>
+    </item>
+    
+  </channel>
+</rss>
