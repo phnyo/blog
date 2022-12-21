@@ -57,20 +57,6 @@ OAuthは認証ではない 要追記
     </item>
     
     <item>
-      <title>nvimの設定まとめがき(2022)</title>
-      <link>https://miso.sabanium.me/post/nvim/</link>
-      <pubDate>Thu, 15 Dec 2022 00:16:14 +0900</pubDate>
-      
-      <guid>https://miso.sabanium.me/post/nvim/</guid>
-      <description>これはRICORA言語班 Advent Calendarの24日目の記事です。クリスマスってなんにゃ?
-背景 新たに今年Thinkpad X270を購入して破壊したり、なんか人生に疲れたのでubuntuを破壊してdebianにするなどの行動を行っていたらvimもなんとなくneovimにしたほうがいい気がしてきました（正確にはcoc.nvimなどの補完機能がついていること、もともとnvimを敬遠していたのが:termを使うとなんか嫌な感じだった→使わなくなったなどの理由です）。config等の管理は大体破綻するので、明示的にそれを書き残すことで備忘します。
-プラグインなど プラグイン管理はvim-plugでしています。プラグインは以下の通り。
-coc.nvim vim-sandwich nerdtree vim-snippets preview-markdown fern gina nerdtreeとcocは使っているがほかは&amp;hellip;
-coc-nvimの設定 うんち
-おわりに もうちょっとちゃんとnvimしたほうがいいよと思いました。2023はnvimの年にしようと思います。</description>
-    </item>
-    
-    <item>
       <title>RaspberryPiからの動画配信について</title>
       <link>https://miso.sabanium.me/post/rpi-video/</link>
       <pubDate>Fri, 02 Dec 2022 00:00:00 +0900</pubDate>
