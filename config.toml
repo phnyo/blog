@@ -3,6 +3,7 @@ languageCode = 'ja-JP'
 title = "鯖の味噌煮がおいしく炊けない"
 theme = "hugo-tania"
 publishDir = "docs"
+staticDir = "static"
 [params]
   [params.socialOptions]
     twitter = "https://twitter.com/nesoberist"
