@@ -5,7 +5,310 @@
     <description>Recent content on 鯖の味噌煮がおいしく炊けない</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Fri, 02 Dec 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 21 Dec 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://miso.sabanium.me/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+    <title>OAuth2.0のまとめ</title>
+    <link>https://miso.sabanium.me/post/oauth2/</link>
+    <pubDate>Wed, 21 Dec 2022 00:00:00 +0900</pubDate>
+    <author>sabanium</author>
+    <guid>https://miso.sabanium.me/post/oauth2/</guid>
+    <description>
+        &lt;p&gt;これは&lt;a href=&#34;https://adventar.org/calendars/7447&#34;&gt;RICORA言語班 Advent Calendar&lt;/a&gt;の24日目の記事です。&lt;/p&gt;
+&lt;h3 id=&#34;背景&#34;&gt;
+    &lt;a href=&#34;#%e8%83%8c%e6%99%af&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    背景
+&lt;/h3&gt;
+&lt;p&gt;アルバイトで調べることになったため。&lt;/p&gt;
+&lt;h3 id=&#34;oauth20に至る背景&#34;&gt;
+    &lt;a href=&#34;#oauth20%e3%81%ab%e8%87%b3%e3%82%8b%e8%83%8c%e6%99%af&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    OAuth2.0に至る背景
+&lt;/h3&gt;
+&lt;p&gt;　HTTPはドキュメントの送受信とAPIへのアクセスを兼ねるが、ステートレスなのでAPIへの認証を提供していない。そこで、APIへの認証を適切に提供することで、クライアントが正しい権限でリソースにアクセスできるようにする機構が必要。そこで、リソースへのアクセスに対してアクセストークンを発行するという方式をとる。そのために、OAuthはトークンの取得方法と使用方法を定義する。&lt;/p&gt;
+&lt;h3 id=&#34;構成と前提&#34;&gt;
+    &lt;a href=&#34;#%e6%a7%8b%e6%88%90%e3%81%a8%e5%89%8d%e6%8f%90&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    構成と前提
+&lt;/h3&gt;
+&lt;p&gt;　前提として、リソースの所有者（人類であってもよい）が、クライアントアプリに、認証が必要なリソースへのアクセスをさせたいとする。例えば、メールアドレスを付与されている個人がメールボックスに入っているメールを確認するためにクライアントアプリを通じてメールボックスのデータにアクセスしたい場合など。POP3でもIMAPでもいいが、基本的に人類は毎日温かみのある&lt;code&gt;cURL&lt;/code&gt;を書くわけではなく、サンダーバードちゃんなどにそこらへんを全部任せているので、クライアントを想定するのは必須である。&lt;/p&gt;
+&lt;p&gt;構成は以下の通り。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// 構成
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;tokenの発行&#34;&gt;
+    &lt;a href=&#34;#token%e3%81%ae%e7%99%ba%e8%a1%8c&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    Tokenの発行
+&lt;/h3&gt;
+&lt;p&gt;　認証が必要なリソースへのアクセスを考えると、とりあえずは以下のような手順を取ることになる。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;リソース所有者がクライアントに認証が必要なリソースへのアクセスを指示する&lt;/li&gt;
+&lt;li&gt;クライアントは認可サーバーに問い合わせて、リソース所有者にクライアントを認可してもらう&lt;/li&gt;
+&lt;li&gt;所有者に認可されたクライアントは認可サーバーにトークンを発行してもらう&lt;/li&gt;
+&lt;li&gt;クライアントはトークンをリソースに提示する&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;　では認可のための、認可コードによる付与形式という機構を考えよう。クライアントアプリ側でリソース所有者による認可が必要だと判断したとき、以下のようなことが行われる。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;クライアントは所有者を認可サーバーの認可エンドポイントへリダイレクトする。ステータスコードは302とか。その他に、ヘッダーにスコープを埋め込むことでトークンの権限範囲を指定する。&lt;/li&gt;
+&lt;li&gt;所有者は認可サーバーでクライアントの権限などを認識した上でクライアントを認可する。&lt;/li&gt;
+&lt;li&gt;認可サーバーは所有者をクライアントへ認可コードと共に送る。これはURIに&lt;code&gt;code=???&lt;/code&gt;として埋め込まれる&lt;/li&gt;
+&lt;li&gt;クライアントは認可コードと自身の認証情報を認可サーバーに送る。認可サーバーは認可コードが3.で発行されたものであることを検証し、問題がなければトークンを発行する。&lt;/li&gt;
+&lt;li&gt;クライアントはトークンを得て、リソースにアクセスする。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;　なんらかのサービスのAPIを利用しようとした時に&lt;code&gt;Bearer Token&lt;/code&gt;がなんちゃら&amp;hellip;と言われると思うが、その&lt;code&gt;Bearer Token&lt;/code&gt;はこのアクセストークンである。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// ず
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;　もちろんトークンには有効期限があるので、トークンを新たにリクエストするためのリフレッシュトークンというものも存在する。リフレッシュトークンの仕組みは単純であり、&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;認可サーバーにリフレッシュトークンと古いアクセストークンを送る&lt;/li&gt;
+&lt;li&gt;新しいアクセストークンが返送される&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;という形でアクセストークンを新しくすることができる。&lt;/p&gt;
+&lt;h3 id=&#34;oauthは認証ではない&#34;&gt;
+    &lt;a href=&#34;#oauth%e3%81%af%e8%aa%8d%e8%a8%bc%e3%81%a7%e3%81%af%e3%81%aa%e3%81%84&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    OAuthは認証ではない
+&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;要追記&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;セキュリティ&#34;&gt;
+    &lt;a href=&#34;#%e3%82%bb%e3%82%ad%e3%83%a5%e3%83%aa%e3%83%86%e3%82%a3&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    セキュリティ
+&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;要追記&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;実装とか&#34;&gt;
+    &lt;a href=&#34;#%e5%ae%9f%e8%a3%85%e3%81%a8%e3%81%8b&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    実装とか
+&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;要追記&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;参考文献&#34;&gt;
+    &lt;a href=&#34;#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    参考文献
+&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.rfc-editor.org/rfc/rfc6749&#34;&gt;https://www.rfc-editor.org/rfc/rfc6749&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+    </description>
+    </item>
+    
+    <item>
+    <title>ふりかえり2022</title>
+    <link>https://miso.sabanium.me/post/throwback2022/</link>
+    <pubDate>Mon, 19 Dec 2022 00:16:14 +0900</pubDate>
+    <author>sabanium</author>
+    <guid>https://miso.sabanium.me/post/throwback2022/</guid>
+    <description>
+        &lt;p&gt;　これは&lt;a href=&#34;https://adventar.org/calendars/7447&#34;&gt;RICORA言語班 Advent Calendar&lt;/a&gt;の22日目の記事です。&lt;/p&gt;
+&lt;p&gt;　昨日は&lt;a href=&#34;https://twitter.com/kakudo415&#34;&gt;Kakudo&lt;/a&gt;さんの&lt;a href=&#34;https://kakudokentaro.com/blog/2022/12/21/global-variable-in-rust/&#34;&gt;Rustでもグローバル変数&lt;/a&gt;でした。普通にwebサイトがかっこよくてすごい。前日に題材変えてすみません。OAuthに関しては将来の自分に頼みました。書くことがなさすぎる。&lt;/p&gt;
+&lt;h3 id=&#34;ふりかえり&#34;&gt;
+    &lt;a href=&#34;#%e3%81%b5%e3%82%8a%e3%81%8b%e3%81%88%e3%82%8a&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    ふりかえり
+&lt;/h3&gt;
+&lt;p&gt;　2022年はハッカソンなどに出たり出なかったりバイトに行ったり行かなかったりレポートを出したり出さなかったりしていた。あとは真人間なのでツイッターをやめた。&lt;/p&gt;
+&lt;h3 id=&#34;経験知やったほうがいいことまとめ&#34;&gt;
+    &lt;a href=&#34;#%e7%b5%8c%e9%a8%93%e7%9f%a5%e3%82%84%e3%81%a3%e3%81%9f%e3%81%bb%e3%81%86%e3%81%8c%e3%81%84%e3%81%84%e3%81%93%e3%81%a8%e3%81%be%e3%81%a8%e3%82%81&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    経験知：やったほうがいいことまとめ
+&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;俺は〇〇できます・〇〇できませんと叫んだほうがいい&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基本的に人間は未来予測が正確にできないため、だいたいできる！！！！！といってできないことが多い（3敗）ので見極めが大事&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;打ち返す速度を上げる&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;納期がまあまあ遠くてもちゃんと仕事をしないと前日になる&lt;/li&gt;
+&lt;li&gt;ちゃんと仕事をするという信頼を得ることがかなり大事だと思う&lt;/li&gt;
+&lt;li&gt;課題とかでまあまあ疲れると手慣れたプログラムしか書けない&lt;/li&gt;
+&lt;li&gt;つまりある程度認知的にバッファを持って色々やったほうがよい&lt;/li&gt;
+&lt;li&gt;slackではメンションをつける&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;要件を詰める&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;めんどいが詰めないともっとめんどいことになりがち&lt;/li&gt;
+&lt;li&gt;学生同士でなんかすると雰囲気でなんかやりがちだけど割と個人タスクがわからなくなるので（人間も）詰めたほうがいい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;他人に対して期待しない&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;あなたにも色々タスクがあるように皆も色々タスクがある&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;適度に発話する&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;話さないと存在が認知されない&lt;/li&gt;
+&lt;li&gt;話しすぎるとコミュニケーションではない&lt;/li&gt;
+&lt;li&gt;話している内容に意味がなくとも人間ごっこの練習だと思って聞くと良い&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;寝る&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;夜は寝たほうがいい。寝ないと体力が欠乏して社会か学業か労働のどれかがめちゃくちゃになる。ぼくのばあいしゃかいはそんざいしていませんでした。かなしいね。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;人生について考えない&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;はい。&lt;/li&gt;
+&lt;li&gt;恋愛・結婚・老後が概ね幼年期の刷り込みとしてあるので、30くらいで死ぬと想定してそれらを滅却する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;今年の失敗シリーズ&#34;&gt;
+    &lt;a href=&#34;#%e4%bb%8a%e5%b9%b4%e3%81%ae%e5%a4%b1%e6%95%97%e3%82%b7%e3%83%aa%e3%83%bc%e3%82%ba&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    今年の失敗シリーズ
+&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;失敗談１：3週間のハッカソンのプロダクトを前日に作ることになった&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;対処法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;メンバーがGithubを知っているか・ユーザーアカウント・コミット数がある程度あることなどを確認する&lt;/li&gt;
+&lt;li&gt;ビジネスサイドをかじった人間には強制的にタスクを振ったりリーダーをやらせたりしてそれっぽく振る舞わせて、手持ち無沙汰にさせない&lt;/li&gt;
+&lt;li&gt;タスクをあげないと動けない人にはスキルセットなどをちゃんと共有してもらい、自分が話している内容を理解しているか確認する&lt;/li&gt;
+&lt;li&gt;タイムスケジュールを管理する人をちゃんと選定しておく（人格で）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;失敗談２：「〇〇くん知ってる？あ、知らないか」という音声を聞き取ってしまう&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;対処法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;記憶に残ると苦しいので、酒とかでいい感じに鈍麻になったほうがいい&lt;/li&gt;
+&lt;li&gt;学部での社会生活はないですけどそれ以外ではあって正常な人間ですよ！というアピールをできる感じの言葉で打ち返したほうがいい&lt;/li&gt;
+&lt;li&gt;同人音声で上書きする（Project E.L.Cさんとアクア・アルタさん、ありがとうございます）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;失敗談3：家から出られない日が発生する&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;対処法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;家から出ない&lt;/li&gt;
+&lt;li&gt;大学のことを忘れて14時間くらい寝る。その後飯を食う。また寝るを繰り返す&lt;/li&gt;
+&lt;li&gt;大学に行く場合はノイキャンイヤホンで音楽を聞き、周囲から切断される&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;失敗談4:　ノイキャンイヤホンを２つ紛失する&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;対処法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;買わないと大学で苦しいので買う&lt;/li&gt;
+&lt;li&gt;買わない&lt;/li&gt;
+&lt;li&gt;多分また買います&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;あとは正常に人間とのコミュニケーションが取れませんx10とか書類選考落ちましたx4とかです。俺ってどうしたらいいですか。&lt;/p&gt;
+
+    </description>
+    </item>
+    
+    <item>
+    <title>nvimの設定まとめがき(2022)</title>
+    <link>https://miso.sabanium.me/post/nvim/</link>
+    <pubDate>Thu, 15 Dec 2022 00:16:14 +0900</pubDate>
+    <author>sabanium</author>
+    <guid>https://miso.sabanium.me/post/nvim/</guid>
+    <description>
+        &lt;p&gt;これは&lt;a href=&#34;https://adventar.org/calendars/6389&#34;&gt;RICORA言語班 Advent Calendar&lt;/a&gt;の24日目の記事です。クリスマスってなんにゃ?&lt;/p&gt;
+&lt;h3 id=&#34;背景&#34;&gt;
+    &lt;a href=&#34;#%e8%83%8c%e6%99%af&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    背景
+&lt;/h3&gt;
+&lt;p&gt;　新たに今年&lt;a href=&#34;https://www.lenovo.com/jp/ja/p/laptops/thinkpad/thinkpad-x-series/thinkpad-x270/22tp2tx2700&#34;&gt;Thinkpad X270&lt;/a&gt;を購入して破壊したり、なんか人生に疲れたのでubuntuを破壊してdebianにするなどの行動を行っていたらvimもなんとなくneovimにしたほうがいい気がしてきました（正確にはcoc.nvimなどの補完機能がついていること、もともとnvimを敬遠していたのが:termを使うとなんか嫌な感じだった→使わなくなったなどの理由です）。config等の管理は大体破綻するので、明示的にそれを書き残すことで備忘します。&lt;/p&gt;
+&lt;h3 id=&#34;プラグインなど&#34;&gt;
+    &lt;a href=&#34;#%e3%83%97%e3%83%a9%e3%82%b0%e3%82%a4%e3%83%b3%e3%81%aa%e3%81%a9&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    プラグインなど
+&lt;/h3&gt;
+&lt;p&gt;　プラグイン管理は&lt;a href=&#34;&#34;&gt;vim-plug&lt;/a&gt;でしています。プラグインは以下の通り。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;&#34;&gt;coc.nvim&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;&#34;&gt;vim-sandwich&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;&#34;&gt;nerdtree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;&#34;&gt;vim-snippets&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;&#34;&gt;preview-markdown&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;&#34;&gt;fern&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;&#34;&gt;gina&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;nerdtreeとcocは使っているがほかは&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;coc-nvimの設定&#34;&gt;
+    &lt;a href=&#34;#coc-nvim%e3%81%ae%e8%a8%ad%e5%ae%9a&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    coc-nvimの設定
+&lt;/h3&gt;
+&lt;p&gt;うんち&lt;/p&gt;
+&lt;h3 id=&#34;おわりに&#34;&gt;
+    &lt;a href=&#34;#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab&#34; class=&#34;anchor&#34;&gt;
+        &lt;svg class=&#34;icon&#34; aria-hidden=&#34;true&#34; focusable=&#34;false&#34; height=&#34;16&#34; version=&#34;1.1&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;16&#34;&gt;
+            &lt;path fill-rule=&#34;evenodd&#34;
+                d=&#34;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&#34;&gt;
+            &lt;/path&gt;
+        &lt;/svg&gt;
+    &lt;/a&gt;
+    おわりに
+&lt;/h3&gt;
+&lt;p&gt;　もうちょっとちゃんとnvimしたほうがいいよと思いました。2023はnvimの年にしようと思います。&lt;/p&gt;
+
+    </description>
+    </item>
+    
     <item>
     <title>RaspberryPiからの動画配信について</title>
     <link>https://miso.sabanium.me/post/rpi-video/</link>
